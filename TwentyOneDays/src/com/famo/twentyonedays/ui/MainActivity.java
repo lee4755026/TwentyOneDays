@@ -1,4 +1,7 @@
-package com.famo.twentyonedays;
+package com.famo.twentyonedays.ui;
+
+import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.R.layout;
 
 import android.os.Bundle;
 import android.app.Activity;

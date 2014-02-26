@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+     <attr name="navigationBackground" format="reference" />   
+     <attr name="titleBarTextStyle" format="reference" /> 
+     <attr name="listItemDivider" format="reference" /> 
+     <attr name="globalBackground" format="reference" /> 
+     <attr name="progressBarContainerBackground" format="reference" /> 
+     <attr name="progressBar" format="reference" />
+</resources>
