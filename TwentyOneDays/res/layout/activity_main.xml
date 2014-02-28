@@ -1,44 +1,45 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity" >
 
-   <RelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigation_bar_height"
         android:background="?navigationBackground" >
 
-		<LinearLayout 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_centerInParent="true">
-		    
-        <TextView
-            android:id="@android:id/title"
-            style="?titleBarTextStyle"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="今天" />
-          <TextView
-            android:id="@+id/week"
-            style="?titleBarTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textSize="9sp"
-            android:text="星期一" />
-		</LinearLayout>
+            android:layout_centerInParent="true" >
+
+            <TextView
+                android:id="@android:id/title"
+                style="?titleBarTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="今天" />
+
+            <TextView
+                android:id="@+id/week"
+                style="?titleBarTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="星期一"
+                android:textSize="9sp" />
+        </LinearLayout>
 
         <Button
-            android:id="@+id/refresh_button"
+            android:id="@+id/add_button"
             android:layout_width="@dimen/navigation_bar_height"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/button_add_background"
-            android:textSize="15.0sp" />
+            android:background="@drawable/button_add_background" />
     </RelativeLayout>
 
     <FrameLayout
@@ -51,4 +52,5 @@
 
         <include layout="@layout/list_empty" />
     </FrameLayout>
-</RelativeLayout>
+
+</LinearLayout>

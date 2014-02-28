@@ -8,6 +8,14 @@ import java.util.Date;
  * <br/>2014-2-26 上午11:13:21
  */
 public class PlanEntry{
+	
+	
+	public PlanEntry() {
+	}
+	public PlanEntry(int id, String title) {
+		this.id = id;
+		this.title = title;
+	}
 	public int id;
 	/**
 	 * 标题
