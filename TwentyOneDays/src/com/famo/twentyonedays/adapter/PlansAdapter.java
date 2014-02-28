@@ -69,7 +69,7 @@ public class PlansAdapter extends BaseAdapter {
 				}
 
 				}
-				return true;   
+				return true;
 			}
 		});
 		/*
