@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
-public class FrameViewGroup extends RelativeLayout {
+public class FrameViewGroupBackUp extends RelativeLayout {
 	private static final String TAG="FrameViewGroup";
 	private static final int SNAP_VELOCITY = 600;
 	private Context mContext;
@@ -24,13 +24,13 @@ public class FrameViewGroup extends RelativeLayout {
 	private float mLastMotionX;
 	private VelocityTracker mVelocityTracker;
 
-	public FrameViewGroup(Context context) {
+	public FrameViewGroupBackUp(Context context) {
 		super(context);
 		mContext = context;
 		init();
 	}
 
-	public FrameViewGroup(Context context, AttributeSet attrs) {
+	public FrameViewGroupBackUp(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
 		init();
@@ -40,15 +40,12 @@ public class FrameViewGroup extends RelativeLayout {
 	private void init() {
 		mScroller=new Scroller(mContext);
 		
-//		this.removeAllViews();
-		
 //		LinearLayout front=new LinearLayout(mContext);
 //		front.setBackgroundColor(Color.RED);
 //		addView(front);
 //		LinearLayout back=new LinearLayout(mContext);
 //		back.setBackgroundColor(Color.BLUE);
 //		addView(back);
-		
 		
 		mTouchSlop=ViewConfiguration.get(mContext).getScaledTouchSlop();
 	}
@@ -71,7 +68,7 @@ public class FrameViewGroup extends RelativeLayout {
 			int bottom) {
 		int childCount = getChildCount();
 		Log.i(TAG, "--- onLayout childCount is -->" + childCount );
-		super.onLayout(changed, left, top, right, bottom);
+
 		for (int i = 0; i < childCount; i++) {
 			View child = getChildAt(i);
 			child.layout(0, 0, getWidth(), getHeight());
