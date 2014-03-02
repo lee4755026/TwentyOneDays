@@ -10,14 +10,17 @@ import com.famo.twentyonedays.model.PlanEntry;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
 	private View progress;
 	private View empty;
 	private ListView listView;
+	private Button buttonAdd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,10 +33,17 @@ public class MainActivity extends Activity {
 		progress=findViewById(android.R.id.progress);
 		empty=findViewById(android.R.id.empty);
 		listView=(ListView) findViewById(android.R.id.list);
+		buttonAdd=(Button) findViewById(R.id.add_button);
 	}
 	private void bindEvents() {
-		// TODO Auto-generated method stub
-		
+		buttonAdd.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent(MainActivity.this,DetailActivity.class	);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	private void bindData(){
