@@ -42,13 +42,32 @@
             android:background="@drawable/button_add_background" />
     </RelativeLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+        <com.famo.twentyonedays.ui.widget.ListViewCustom
+            android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff4f7f9"
+        android:cacheColorHint="#00000000"
+        android:divider="#dddbdb"
+        android:dividerHeight="1.0px"
+        android:drawSelectorOnTop="false"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none" >
+        </com.famo.twentyonedays.ui.widget.ListViewCustom>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
         <include layout="@layout/progress_bar" />
 
-        <include layout="@layout/common_list" />
+        <!-- <include layout="@layout/common_list" /> -->
 
         <include layout="@layout/list_empty" />
     </FrameLayout>

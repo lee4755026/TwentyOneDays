@@ -1,51 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/front_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants" >
+    android:layout_height="@dimen/list_item_height"
+    android:layout_gravity="center_vertical"
+   
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+     >
 
-    <!--
-                      android:focusable="false"
-        android:focusableInTouchMode="false"
-    -->
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_gravity="center_vertical"
-        android:visibility="visible" >
-
-        <Button
-            android:id="@+id/remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/button_remove_background"
-            android:paddingRight="5dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/front_layout"
+    <TextView
+        android:id="@android:id/text1"
+        style="@style/list_item_text_style"
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_item_height"
-        android:layout_gravity="center_vertical"
-        android:background="@color/transparent"
         android:gravity="center_vertical"
-        android:visibility="visible" >
+        android:text="读一本好书" />
 
-        <TextView
-            android:id="@android:id/text1"
-            style="@style/list_item_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/list_item_height"
-             android:gravity="center_vertical"
-            android:background="@color/orange"
-            android:paddingBottom="6dip"
-            android:paddingLeft="45dip"
-            android:paddingTop="6dip"
-            android:text="读一本好书" />
-    </RelativeLayout>
-
-</FrameLayout>
+</LinearLayout>

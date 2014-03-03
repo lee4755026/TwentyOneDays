@@ -2,26 +2,27 @@ package com.famo.twentyonedays.adapter;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.model.PlanEntry;
-
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.famo.twentyonedays.ui.widget.SlideViewWidget;
 
 public class PlansAdapter extends BaseAdapter {
 	private static final String TAG="PlansAdapter";
 	private Context mContext;
 	private LayoutInflater inflater;
 	private List<PlanEntry> dataList;
+	private ViewHolder holder;
+    private SlideViewWidget mLastSlideViewWithStatusOn;
 
 	public PlansAdapter(Context mContext, List<PlanEntry> dataList) {
 		this.mContext = mContext;
@@ -45,74 +46,75 @@ public class PlansAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, View convertView, ViewGroup parent) {	
+		SlideViewWidget slideView=null;
 		if(convertView==null){
-			convertView=inflater.inflate(R.layout.list_item, null);
-		}
-		TextView text=(TextView) convertView.findViewById(android.R.id.text1);
-		text.setText(dataList.get(position).title);
-		convertView.setOnTouchListener(new OnTouchListener() {
+			View itemView=inflater.inflate(R.layout.list_item, null);
 			
-			private float lastPositionX=0;
+			slideView=new SlideViewWidget(mContext);
+			slideView.setContentView(itemView);
+			
+			holder=new ViewHolder(slideView);
+			slideView.setOnSlideListener(new SlideViewWidget.OnSlideListener() {
+				
+				@Override
+				public void onSlide(View view, int status) {
+					if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+			            mLastSlideViewWithStatusOn.shrink();
+			        }
 
+			        if (status == SLIDE_STATUS_ON) {
+			            mLastSlideViewWithStatusOn = (SlideViewWidget) view;
+			        }					
+				}
+			});
+			slideView.setTag(holder);
+		}else{
+			slideView=(SlideViewWidget) convertView;
+			holder=(ViewHolder) slideView.getTag();
+		}
+		
+		PlanEntry planEntry = dataList.get(position);
+		planEntry.slideView=slideView;
+		holder.text.setText(planEntry.title);
+		final int index=position;
+		final SlideViewWidget tempView=slideView;
+		holder.deleteHolder.setOnClickListener(new View.OnClickListener() {
+			
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				float x=event.getX();
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					lastPositionX=event.getX();
-					break;
-				case MotionEvent.ACTION_MOVE:{
-					int detaX=(int) (lastPositionX-x);
-					v.findViewById(R.id.front_layout).scrollBy(detaX, 0);
-					lastPositionX=x;
-				}
-
-				}
-				return true;
+			public void onClick(View v) {
+				if (v.getId() == R.id.holder) {
+		            Log.e(TAG, "onClick v=" + v);		            
+		            new AlertDialog.Builder(mContext)
+		            .setMessage("确定要删除吗?")
+		            .setPositiveButton("是",new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+//							tempView.shrink();
+							dataList.remove(index);
+				            notifyDataSetChanged();							
+						}
+					})
+					.setNegativeButton("否", null)
+					.create().show();
+		            
+		        }				
 			}
 		});
-		/*
-		convertView.setOnTouchListener(new View.OnTouchListener() {
-		float downX=0;
-		float upX=0;
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction())//根据动作来执行代码     
-                    {    
-                    case MotionEvent.ACTION_MOVE://滑动     
-//                        Toast.makeText(context, "move...", Toast.LENGTH_SHORT).show();  
-                        break;    
-                    case MotionEvent.ACTION_DOWN://按下     
-//                        Toast.makeText(context, "down...", Toast.LENGTH_SHORT).show();  
-                        downX = event.getX();  
-                        break;    
-                    case MotionEvent.ACTION_UP://松开     
-                        upX = event.getX();  
-//                        Toast.makeText(context, "up..." + Math.abs(UpX-DownX), Toast.LENGTH_SHORT).show();  
-                        if(-(upX-downX) > 20){  
-//                            ViewHolder holder = (ViewHolder) v.getTag();  
-//                            holder.cBox.setVisibility(View.VISIBLE);  
-                        	TranslateAnimation animation=new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,-0.2f, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-            				animation.setDuration(2000);
-            				animation.setFillAfter(true);
-            				v.findViewById(R.id.front_layout).startAnimation(animation);
-                        } else  if((upX-downX) > 20){  
-                        	TranslateAnimation animation=new TranslateAnimation(Animation.RELATIVE_TO_SELF, -0.2f, Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-            				animation.setDuration(2000);
-            				animation.setFillAfter(true);
-            				v.findViewById(R.id.front_layout).startAnimation(animation);
-                        }else{
-                        	Toast.makeText(mContext, "暂定为点击。。", Toast.LENGTH_SHORT).show();  
-                        }
-                        break;
-					default:    
-                    }    
-                    return true;   
-                }  
-	});
-		*/
-		return convertView;
+
+		
+		return slideView;
+	}
+	
+	private static class ViewHolder{
+		TextView text;
+		ViewGroup deleteHolder;
+		
+		ViewHolder(View view) {
+			text = (TextView) view.findViewById(android.R.id.text1);
+			deleteHolder = (ViewGroup) view.findViewById(R.id.holder);
+		}
 	}
 
 }

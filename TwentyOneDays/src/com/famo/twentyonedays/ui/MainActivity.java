@@ -3,23 +3,20 @@ package com.famo.twentyonedays.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.famo.twentyonedays.R;
-import com.famo.twentyonedays.R.layout;
-import com.famo.twentyonedays.adapter.PlansAdapter;
-import com.famo.twentyonedays.model.PlanEntry;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
+import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.adapter.PlansAdapter;
+import com.famo.twentyonedays.model.PlanEntry;
+import com.famo.twentyonedays.ui.widget.ListViewCustom;
 
 public class MainActivity extends Activity {
 	private View progress;
 	private View empty;
-	private ListView listView;
+	private ListViewCustom listView;
 	private Button buttonAdd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +29,7 @@ public class MainActivity extends Activity {
 	private void findViews() {
 		progress=findViewById(android.R.id.progress);
 		empty=findViewById(android.R.id.empty);
-		listView=(ListView) findViewById(android.R.id.list);
+		listView=(ListViewCustom) findViewById(android.R.id.list);
 		buttonAdd=(Button) findViewById(R.id.add_button);
 	}
 	private void bindEvents() {
@@ -58,6 +55,9 @@ public class MainActivity extends Activity {
 		progress.setVisibility(View.GONE);
 		listView.setVisibility(View.VISIBLE);
 	}
+	
+	
+
 
 	
 

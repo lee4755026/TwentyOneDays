@@ -30,7 +30,7 @@
             android:textSize="15.0sp" />
     </RelativeLayout>
 
-    <FrameLayout
+    <com.famo.twentyonedays.ui.widget.SlideViewWidget
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -40,16 +40,19 @@
             android:background="#00f000" >
         </LinearLayout>
 
-        <com.famo.twentyonedays.ui.widget.FrameViewGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#0000ff" >
-            </LinearLayout>
-        </com.famo.twentyonedays.ui.widget.FrameViewGroup>
-    </FrameLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#0000ff" >
+           
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_add_background"
+            android:textSize="15.0sp" />
+        </RelativeLayout>
+    </com.famo.twentyonedays.ui.widget.SlideViewWidget>
 
 </LinearLayout>

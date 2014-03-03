@@ -49,5 +49,6 @@
      <color name="grey">#999999</color>
      <color name="transparent">#00000000</color>
      <color name="hoary">#E9F1F9</color>
+     <color name="dark_blue">#02042f</color>
 
 </resources>

@@ -2,6 +2,8 @@ package com.famo.twentyonedays.model;
 
 import java.util.Date;
 
+import com.famo.twentyonedays.ui.widget.SlideViewWidget;
+
 /**
  * 计划
  * @author LiChaofei 
@@ -37,4 +39,6 @@ public class PlanEntry{
 	 * 提醒时间
 	 */
 	public String reminderTime;
+	
+	public SlideViewWidget slideView;
 }
