@@ -25,11 +25,11 @@
     
     <style name="titlebar_text_style">
 		<item name="android:textColor">@android:color/white</item>                
-		<item name="android:textSize">15.0sp</item>
+		<item name="android:textSize">20.0sp</item>
     </style>
     <style name="list_item_text_style">
 		<item name="android:textColor">@drawable/list_item_text_color</item>                
-		<item name="android:textSize">18.0sp</item>
+		<item name="android:textSize">20.0sp</item>
     </style>
     
      <style name="progressbar">

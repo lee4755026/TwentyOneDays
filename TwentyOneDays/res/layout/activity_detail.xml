@@ -2,13 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context=".DetailActivity" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigation_bar_height"
-        android:background="?navigationBackground" >
+        android:background="?navigationBackground"
+        android:layout_marginBottom="1px" >
+
+        <Button
+            android:id="@id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_back_background"
+            android:onClick="onViewClick" />
 
         <TextView
             android:id="@android:id/title"
@@ -19,40 +30,25 @@
             android:layout_centerVertical="true"
             android:gravity="center_horizontal"
             android:text="@string/app_name" />
-
-        <Button
-            android:id="@+id/refresh_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/button_add_background"
-            android:textSize="15.0sp" />
     </RelativeLayout>
 
-    <com.famo.twentyonedays.ui.widget.SlideViewWidget
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+  <TextView 
+      android:id="@id/content"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:singleLine="false"
+      android:background="@color/yellow"
+      android:textColor="@color/white"
+      android:textSize="20sp"
+      android:lines="8"
+      android:text="每天晚饭后读半小时书，书箱是人类进步的阶梯。"
+      />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#00f000" >
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#0000ff" >
-           
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/button_add_background"
-            android:textSize="15.0sp" />
-        </RelativeLayout>
-    </com.famo.twentyonedays.ui.widget.SlideViewWidget>
+  <View
+      android:id="@id/calendar"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/brown" />
 
 </LinearLayout>
