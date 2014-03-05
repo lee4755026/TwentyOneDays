@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 public class ListViewCustom extends ListView {
 	private SlideViewWidget mFocusedItemView;
+	private OnItemClickListener mOnItemClickListener;
 
 	public ListViewCustom(Context context) {
 		super(context);
@@ -29,30 +30,45 @@ public class ListViewCustom extends ListView {
 			((SlideViewWidget)item).shrink();			
 		}
 	}
+	
+	int position=INVALID_POSITION;
+	PlanEntry entry=null;
+	boolean handled = false;
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
+
 		switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			int x=(int) ev.getX();
 			int y=(int) ev.getY();
-			int position=pointToPosition(x, y);
+			position=pointToPosition(x, y);
 			if(position!=INVALID_POSITION){
-				PlanEntry entry=(PlanEntry) getItemAtPosition(position);
+				entry=(PlanEntry) getItemAtPosition(position);
 				mFocusedItemView=entry.slideView;
 			}
 			break;
-
 		default:
 			break;
 		}
 		if(mFocusedItemView!=null){
-			mFocusedItemView.onRequireTouchEvent(ev);
+			mFocusedItemView.onRequireTouchEvent(ev, position);
 		}
 		
 		return super.onTouchEvent(ev);
 	}
-	
+
+	/* 
+	 * 用SlideViewWidget.OnSlideListener.onClick(int position)的方法实现点击
+	 * (non-Javadoc)
+	 * @see android.widget.AdapterView#setOnItemClickListener(android.widget.AdapterView.OnItemClickListener)
+	 */
+	@Deprecated
+	@Override
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		mOnItemClickListener=listener;
+	}
+
 	
 
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.model.PlanEntry;
 
 /**
  * 滑动布局
@@ -24,6 +25,7 @@ public class SlideViewWidget extends LinearLayout {
 	 * tan>2时才横向滑动
 	 */
 	private static final int TAN = 2;
+
 	/**
 	 * 滑动的距离/底层视图的宽度
 	 */
@@ -31,11 +33,9 @@ public class SlideViewWidget extends LinearLayout {
 	private Context mContext;
 	private Scroller mScroller;
 
-	private int mTouchSlop = 0;
 	private int mLastX;
 	private int mLastY;
-	private VelocityTracker mVelocityTracker;
-	private int mCurrentScreen=0;
+	private int mDownX;
 	private LinearLayout mViewContent;
 	private OnSlideListener mOnSlideListener;
 
@@ -107,11 +107,11 @@ public class SlideViewWidget extends LinearLayout {
 	}
 
 
-	public void onRequireTouchEvent(MotionEvent event){
+	public void onRequireTouchEvent(MotionEvent event, int position){
 		int x=(int) event.getX();
 		int y=(int) event.getY();
 		int scrollX=getScrollX();
-		 Log.d(TAG, "x=" + x + "  y=" + y);
+		 Log.d(TAG, "x=" + x + "  y=" + y+" scorllX="+scrollX);
 		 
 		 switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
@@ -121,6 +121,7 @@ public class SlideViewWidget extends LinearLayout {
 			if(mOnSlideListener!=null){
 				mOnSlideListener.onSlide(this, OnSlideListener.SLIDE_STATUS_START_SCROLL);
 			}
+			mDownX=x;
 			break;
 		case MotionEvent.ACTION_MOVE:
 			int deltaX=x-mLastX;
@@ -139,13 +140,18 @@ public class SlideViewWidget extends LinearLayout {
 			}
 			break;
 		case MotionEvent.ACTION_UP:
-			int newScrollX2=0;
+			int deltaScrollX=0;
 			if(scrollX-mHolderWidth*0.75>0){
-				newScrollX2=mHolderWidth;
+				deltaScrollX=mHolderWidth;
 			}
-			this.smoothScrollTo(newScrollX2, 0);
+			this.smoothScrollTo(deltaScrollX, 0);
 			if(mOnSlideListener!=null){
-				mOnSlideListener.onSlide(this, newScrollX2==0?OnSlideListener.SLIDE_STATUS_OFF:OnSlideListener.SLIDE_STATUS_ON);
+				mOnSlideListener.onSlide(this, deltaScrollX==0?OnSlideListener.SLIDE_STATUS_OFF:OnSlideListener.SLIDE_STATUS_ON);
+				
+				if(Math.abs(x-mDownX)<10){//微小的滑动视为点击
+					shrink();
+					mOnSlideListener.onClick(position);
+				}
 			}
 			break;
 		default:
@@ -153,6 +159,7 @@ public class SlideViewWidget extends LinearLayout {
 		}
 		 mLastX = x;
 	     mLastY = y;
+	     
 	}
 
 	
@@ -166,6 +173,7 @@ public class SlideViewWidget extends LinearLayout {
 	         * @param status SLIDE_STATUS_ON or SLIDE_STATUS_OFF
 	         */
 	        public void onSlide(View view, int status);
+	        public void onClick(int position);
 	    }
 
 }

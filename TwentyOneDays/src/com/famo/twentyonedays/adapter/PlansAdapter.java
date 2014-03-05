@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.model.PlanEntry;
+import com.famo.twentyonedays.ui.DetailActivity;
+import com.famo.twentyonedays.ui.MainActivity;
 import com.famo.twentyonedays.ui.widget.SlideViewWidget;
 
 public class PlansAdapter extends BaseAdapter {
@@ -67,6 +70,17 @@ public class PlansAdapter extends BaseAdapter {
 			            mLastSlideViewWithStatusOn = (SlideViewWidget) view;
 			        }					
 				}
+
+				@Override
+				public void onClick(int position) {
+					Log.d(TAG, "SlideView onClick");
+					long id=getItemId(position);
+					Intent detail=new Intent(mContext, DetailActivity.class);
+					detail.putExtra(MainActivity.PLAN_ID, id);
+					detail.putExtra(MainActivity.PLAN_TITLE, ((PlanEntry)getItem(position)).title);
+					mContext.startActivity(detail);
+					
+				}
 			});
 			slideView.setTag(holder);
 		}else{
@@ -84,14 +98,18 @@ public class PlansAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				if (v.getId() == R.id.holder) {
-		            Log.e(TAG, "onClick v=" + v);		            
+		            Log.e(TAG, "onClick v=" + v);	
+		            
+					tempView.shrink();//避免删除之后第一条item出现的异常滑动情况。
+					
 		            new AlertDialog.Builder(mContext)
+		            .setTitle("提示")
 		            .setMessage("确定要删除吗?")
 		            .setPositiveButton("是",new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-//							tempView.shrink();
+
 							dataList.remove(index);
 				            notifyDataSetChanged();							
 						}
