@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package com.famo.twentyonedays.ui.widget.calender;
+package com.famo.twentyonedays.ui;
+
+import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.ui.widget.calender.CalendarView;
+import com.famo.twentyonedays.ui.widget.calender.Cell;
+import com.famo.twentyonedays.ui.widget.calender.CalendarView.OnCellTouchListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -44,7 +49,7 @@ import android.widget.Toast;
  * @Version V1.0
  */
 public class CalendarActivity extends Activity  implements CalendarView.OnCellTouchListener{
-	public static final String MIME_TYPE = "vnd.android.cursor.dir/vnd.exina.android.calendar.date";
+	public static final String MIME_TYPE = "vnd.android.cursor.dir/vnd.famo.android.calendar.date";
 	private CalendarView mView = null;
 	private TextView mHit;
 	private Handler mHandler = new Handler();
@@ -54,12 +59,12 @@ public class CalendarActivity extends Activity  implements CalendarView.OnCellTo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_calendar);
         mView = (CalendarView)findViewById(R.id.calendar);
         mView.setOnCellTouchListener(this);
         
-        if(getIntent().getAction().equals(Intent.ACTION_PICK))
-        	findViewById(R.id.hint).setVisibility(View.INVISIBLE);
+//        if(getIntent().getAction().equals(Intent.ACTION_PICK))
+//        	findViewById(R.id.hint).setVisibility(View.INVISIBLE);
         
         btCenter = (Button) findViewById(R.id.btCenter);
         btCenter.setText(mView.getYear() + "-" + (mView.getMonth() + 1));
@@ -110,8 +115,8 @@ public class CalendarActivity extends Activity  implements CalendarView.OnCellTo
 				mView.mDecoraClick.setBounds(ecBounds);
 				mView.invalidate();
 				
-//				this.setResult(RESULT_OK, ret);
-//				finish();
+				this.setResult(RESULT_OK, ret);
+				finish();
 				return;
 			}
 		}

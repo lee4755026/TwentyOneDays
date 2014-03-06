@@ -1,54 +1,60 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.NoTitleBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
+
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-         <item name="navigationBackground">@color/grey_blue</item>
-         <item name="titleBarTextStyle">@style/titlebar_text_style</item>
-         <item name="listItemDivider">@color/grey_blue</item>
-         <item name="globalBackground">@android:color/white</item>
-         <item name="progressBarContainerBackground">@android:color/white</item>
-         	<item name="progressBar">@style/progressbar</item>   
+        <item name="navigationBackground">@color/grey_blue</item>
+        <item name="titleBarTextStyle">@style/titlebar_text_style</item>
+        <item name="listItemDivider">@color/grey_blue</item>
+        <item name="globalBackground">@android:color/white</item>
+        <item name="progressBarContainerBackground">@android:color/white</item>
+        <item name="progressBar">@style/progressbar</item>
     </style>
-    
+
+    <style name="DialogTheme" parent="android:Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+          <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
     <style name="titlebar_text_style">
-		<item name="android:textColor">@android:color/white</item>                
-		<item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">20.0sp</item>
     </style>
+
     <style name="list_item_text_style">
-		<item name="android:textColor">@drawable/list_item_text_color</item>                
-		<item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">@drawable/list_item_text_color</item>
+        <item name="android:textSize">20.0sp</item>
     </style>
-    
-     <style name="progressbar">
+
+    <style name="progressbar">
         <item name="android:maxWidth">20.0dip</item>
         <item name="android:maxHeight">20.0dip</item>
         <item name="android:indeterminateDrawable">@anim/loading</item>
         <item name="android:minWidth">20.0dip</item>
         <item name="android:minHeight">20.0dip</item>
     </style>
-    
-    
+
     <!-- 配色 -->
-     <color name="grey_blue">#67809f</color>
-     <color name="orange">#e87f3d</color>
-     <color name="yellow">#e4c45d</color>
-     <color name="brown">#b7a575</color>
-     <color name="grey">#999999</color>
-     <color name="transparent">#00000000</color>
-     <color name="hoary">#E9F1F9</color>
-     <color name="dark_blue">#02042f</color>
+    <color name="grey_blue">#67809f</color>
+    <color name="orange">#e87f3d</color>
+    <color name="yellow">#e4c45d</color>
+    <color name="brown">#b7a575</color>
+    <color name="grey">#999999</color>
+    <color name="transparent">#00000000</color>
+    <color name="hoary">#E9F1F9</color>
+    <color name="dark_blue">#02042f</color>
 
 </resources>

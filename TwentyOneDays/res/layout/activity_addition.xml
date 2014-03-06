@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1px"
-        android:background="@color/brown"
+        android:background="@color/orange"
         android:clickable="true"
         android:drawableLeft="@drawable/calendar"
         android:gravity="center_vertical"
@@ -72,12 +72,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1px"
-        android:background="@color/orange"
+        android:background="@color/brown"
         android:clickable="true"
         android:drawableLeft="@drawable/alarm"
         android:gravity="center_vertical"
         android:onClick="onViewClick"
-        android:text="1月1日--1月21日" />
+        android:text="21:00" />
 
     <!--
     <RelativeLayout

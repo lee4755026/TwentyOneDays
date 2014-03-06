@@ -19,6 +19,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 /**
  * 日期控件单元格
@@ -38,7 +39,7 @@ public class Cell {
 	private static final String TAG = "Cell";
 	protected Rect mBound = null;
 	protected int mDayOfMonth = 1;	// from 1 to 31
-	protected Paint mPaint = new Paint(Paint.SUBPIXEL_TEXT_FLAG
+	public Paint mPaint = new Paint(Paint.SUBPIXEL_TEXT_FLAG
             |Paint.ANTI_ALIAS_FLAG);
 	int dx, dy;
 	public Cell(int dayOfMon, Rect rect, float textSize, boolean bold) {
@@ -46,6 +47,10 @@ public class Cell {
 		mBound = rect;
 		mPaint.setTextSize(textSize/*26f*/);
 		mPaint.setColor(Color.BLACK);
+		
+		mPaint.setStyle(Style.STROKE);
+//		mPaint.setStrokeWidth(2);
+		
 		if(bold) mPaint.setFakeBoldText(true);
 		
 		dx = (int) mPaint.measureText(String.valueOf(mDayOfMonth)) / 2;
@@ -57,6 +62,11 @@ public class Cell {
 	}
 	
 	protected void draw(Canvas canvas) {
+//		canvas.save();
+//		Paint paint=new Paint(mPaint);
+//		paint.setColor(Color.BLACK);		
+//		canvas.drawRect(mBound, paint);
+//		canvas.restore();
 		canvas.drawText(String.valueOf(mDayOfMonth), mBound.centerX() - dx, mBound.centerY() + dy, mPaint);
 	}
 	
