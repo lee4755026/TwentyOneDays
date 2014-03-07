@@ -51,7 +51,7 @@ import android.widget.ImageView;
 public class CalendarView extends ImageView {
     private static int WEEK_TOP_MARGIN = 74;
     private static int WEEK_LEFT_MARGIN = 40;
-    private static int CELL_WIDTH = 68;//58;
+    private static int CELL_WIDTH = 60;
     private static int CELL_HEIGH = 53;
     private static int CELL_MARGIN_TOP = 0;
     private static int CELL_MARGIN_LEFT = 39;
@@ -309,6 +309,7 @@ public class CalendarView extends ImageView {
 		public GrayCell(int dayOfMon, Rect rect, float s) {
 			super(dayOfMon, rect, s);
 			mPaint.setColor(Color.GRAY);
+//			mPaint.setColor(Color.rgb(214, 117, 28));
 		}			
 	}
 	

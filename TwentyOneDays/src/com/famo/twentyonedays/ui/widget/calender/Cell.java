@@ -62,11 +62,14 @@ public class Cell {
 	}
 	
 	protected void draw(Canvas canvas) {
-//		canvas.save();
-//		Paint paint=new Paint(mPaint);
-//		paint.setColor(Color.BLACK);		
-//		canvas.drawRect(mBound, paint);
-//		canvas.restore();
+		canvas.save();
+		Paint paint=new Paint(mPaint);
+		paint.setColor(Color.rgb(214, 119, 39));//暗橙色
+		paint.setStyle(Style.FILL);
+		Rect textBg=new Rect(mBound.centerX() - 25, mBound.centerY()-20, mBound.centerX()+25, mBound.centerY()+25);
+		canvas.drawRect(textBg, paint);
+		canvas.restore();
+		
 		canvas.drawText(String.valueOf(mDayOfMonth), mBound.centerX() - dx, mBound.centerY() + dy, mPaint);
 	}
 	

@@ -293,5 +293,7 @@
     <!-- 黑色 -->
     <color name="lightorange">#ec883b</color>
     <!-- 浅橙色/日历背景色 -->
+    <color name="grayorange">#d67528</color>
+    <!-- 暗橙色/日历上个月字体色 -->
 
 </resources>

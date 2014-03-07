@@ -32,29 +32,34 @@
             android:text="@string/app_name" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/yellow"
-        android:lines="8"
-        android:padding="10dp"
-        android:singleLine="false"
-        android:text="每天晚饭后读半小时书，书箱是人类进步的阶梯。"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:paddingBottom="5dp" >
+        android:cacheColorHint="#00000000"
+        android:fadingEdge="none"
+        android:paddingBottom="0dp"
+        android:background="@color/lightorange"
+        android:scrollbars="none" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/lightorange"
+            android:orientation="vertical"
             android:paddingBottom="5dp" >
+
+            <TextView
+                android:id="@id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1px"
+                android:background="@color/yellow"
+                android:minLines="6"
+                android:padding="10dp"
+                android:singleLine="false"
+                android:text="每天晚饭后读半小时书，书箱是人类进步的阶梯。"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
             <com.famo.twentyonedays.ui.widget.calender.CalendarView
                 android:id="@+id/calendar"

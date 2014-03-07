@@ -2,9 +2,11 @@ package com.famo.twentyonedays.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,16 +14,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.datacenter.manager.DataBaseManager;
+import com.famo.twentyonedays.model.PlanEntry;
 
 public class AdditionActivity extends Activity {
 
 	private static final String TAG = "AdditionActivity";
-	private TextView title;
-	private TextView content;
+	private TextView TvTitle;
+	private TextView TvContent;
 	private Button back;
 	private View calendarView;
 	private TextView planDate;
 	private TextView planAlarmTime;
+	
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,8 @@ public class AdditionActivity extends Activity {
 	}
 
 	private void findViews() {
-		title = (TextView) findViewById(android.R.id.title);
-		content = (TextView) findViewById(R.id.content);
+		TvTitle = (TextView) findViewById(android.R.id.title);
+		TvContent = (TextView) findViewById(R.id.content);
 		back = (Button) findViewById(R.id.back);
 		calendarView = findViewById(R.id.calendar);
 		planDate=(TextView) findViewById(R.id.plan_performance_date);
@@ -50,7 +56,7 @@ public class AdditionActivity extends Activity {
 		long planId = getIntent().getLongExtra(MainActivity.PLAN_ID, 0);
 		String planName = getIntent().getStringExtra(MainActivity.PLAN_TITLE);
 		Log.d(TAG, "planId=" + planId + ",planName=" + planName);
-		title.setText(planName);
+		TvTitle.setText(planName);
 	}
 	
 	public void onViewClick(View v){
@@ -67,6 +73,20 @@ public class AdditionActivity extends Activity {
 			break;
 		case R.id.save:
 			Log.d(TAG, "保存");
+			PlanEntry entry=new PlanEntry();
+			entry.title=TvTitle.getText().toString();
+			entry.content=TvContent.getText().toString();
+			Calendar calendar=Calendar.getInstance();
+			entry.createTime=sdf.format(calendar.getTime());
+			calendar.add(Calendar.DAY_OF_MONTH, 2);
+			entry.startDate=sdf.format(calendar.getTime());
+			calendar.add(Calendar.DAY_OF_MONTH, 20);
+			entry.endDate=sdf.format(calendar.getTime());
+			entry.reminderTime="21:00";
+			entry.color=Color.RED;
+			
+			DataBaseManager manager=new DataBaseManager(this);
+			manager.insert(entry);
 			break;
 		default:
 			break;
@@ -83,8 +103,11 @@ public class AdditionActivity extends Activity {
 			dat.set(Calendar.MONTH, month);
 			dat.set(Calendar.DAY_OF_MONTH, day);
 			
-			SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd");
-			Toast.makeText(AdditionActivity.this, format.format(dat.getTime()), Toast.LENGTH_LONG).show();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			String start=sdf.format(dat.getTime());
+			dat.add(Calendar.DAY_OF_MONTH, 20);
+			String end=sdf.format(dat.getTime());
+			planDate.setText(start+"--"+end);
 					
 		}
 	}

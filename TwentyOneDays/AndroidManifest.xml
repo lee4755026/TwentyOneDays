@@ -27,8 +27,9 @@
         </activity>
         <activity android:name=".ui.AdditionActivity" >
         </activity>
-        <activity android:name=".ui.CalendarActivity" 
-            android:theme="@style/DialogTheme">
+        <activity
+            android:name=".ui.CalendarActivity"
+            android:theme="@style/DialogTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
 
@@ -37,6 +38,13 @@
                 <data android:mimeType="vnd.android.cursor.dir/vnd.famo.android.calendar.date" />
             </intent-filter>
         </activity>
+        <!-- 测试 -->
+        <uses-library android:name="android.test.runner" />
     </application>
+     <!-- 测试 -->
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:targetPackage="com.famo.twentyonedays" >
+    </instrumentation>
 
 </manifest>

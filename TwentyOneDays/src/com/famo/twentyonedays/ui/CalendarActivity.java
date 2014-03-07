@@ -110,8 +110,6 @@ public class CalendarActivity extends Activity  implements CalendarView.OnCellTo
 				// 在此让当前的View 重绘一次
 				ecBounds = cell.getBound();
 				mView.getDate();
-//				MyCalendarView mCalendarView = new MyCalendarView(CalendarActivity.this);
-//				mCalendarView  =  (MyCalendarView) mView;
 				mView.mDecoraClick.setBounds(ecBounds);
 				mView.invalidate();
 				
