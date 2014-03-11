@@ -11,7 +11,7 @@ import android.widget.ListView;
 public class ListViewCustom extends ListView {
 	private SlideViewWidget mFocusedItemView;
 	private OnItemClickListener mOnItemClickListener;
-
+	private OnItemDeleteClickListener mOnItemDeleteClickListener;
 	public ListViewCustom(Context context) {
 		super(context);
 	}
@@ -67,6 +67,28 @@ public class ListViewCustom extends ListView {
 	@Override
 	public void setOnItemClickListener(OnItemClickListener listener) {
 		mOnItemClickListener=listener;
+	}
+	
+	
+	
+	public OnItemDeleteClickListener getOnItemDeleteClickListener() {
+		return mOnItemDeleteClickListener;
+	}
+
+	public void setOnItemDeleteClickListener(
+			OnItemDeleteClickListener mOnItemDeleteClickListener) {
+		this.mOnItemDeleteClickListener = mOnItemDeleteClickListener;
+	}
+
+
+
+	/**
+	 * 处理删除按钮的点击事件
+	 * @author LiChaofei 
+	 * <br/>2014-3-10 下午4:36:49
+	 */
+	public interface OnItemDeleteClickListener{
+		void onDelete(int position);
 	}
 
 	

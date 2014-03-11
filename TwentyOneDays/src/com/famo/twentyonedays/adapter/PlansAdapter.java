@@ -17,6 +17,7 @@ import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.model.PlanEntry;
 import com.famo.twentyonedays.ui.DetailActivity;
 import com.famo.twentyonedays.ui.MainActivity;
+import com.famo.twentyonedays.ui.widget.ListViewCustom;
 import com.famo.twentyonedays.ui.widget.SlideViewWidget;
 
 public class PlansAdapter extends BaseAdapter {
@@ -74,7 +75,7 @@ public class PlansAdapter extends BaseAdapter {
 				@Override
 				public void onClick(int position) {
 					Log.d(TAG, "SlideView onClick");
-					long id=getItemId(position);
+					int id=(int) getItemId(position);
 					Intent detail=new Intent(mContext, DetailActivity.class);
 					detail.putExtra(MainActivity.PLAN_ID, id);
 					detail.putExtra(MainActivity.PLAN_TITLE, ((PlanEntry)getItem(position)).title);
@@ -93,6 +94,7 @@ public class PlansAdapter extends BaseAdapter {
 		holder.text.setText(planEntry.title);
 		final int index=position;
 		final SlideViewWidget tempView=slideView;
+		final ListViewCustom list=(ListViewCustom) parent;
 		holder.deleteHolder.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -101,21 +103,21 @@ public class PlansAdapter extends BaseAdapter {
 		            Log.e(TAG, "onClick v=" + v);	
 		            
 					tempView.shrink();//避免删除之后第一条item出现的异常滑动情况。
-					
-		            new AlertDialog.Builder(mContext)
-		            .setTitle("提示")
-		            .setMessage("确定要删除吗?")
-		            .setPositiveButton("是",new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-
-							dataList.remove(index);
-				            notifyDataSetChanged();							
-						}
-					})
-					.setNegativeButton("否", null)
-					.create().show();
+					list.getOnItemDeleteClickListener().onDelete(index);
+//		            new AlertDialog.Builder(mContext)
+//		            .setTitle("提示")
+//		            .setMessage("确定要删除吗?")
+//		            .setPositiveButton("是",new DialogInterface.OnClickListener() {
+//						
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//
+//							dataList.remove(index);
+//				            notifyDataSetChanged();							
+//						}
+//					})
+//					.setNegativeButton("否", null)
+//					.create().show();
 		            
 		        }				
 			}

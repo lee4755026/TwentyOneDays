@@ -16,9 +16,15 @@
 
 package com.famo.twentyonedays.ui.widget.calender;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import javax.xml.transform.Templates;
 
 import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.utils.Tools;
 
 import android.R.integer;
 import android.content.Context;
@@ -30,6 +36,7 @@ import android.graphics.Rect;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.MonthDisplayHelper;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -71,6 +78,8 @@ public class CalendarView extends ImageView {
     Drawable mDecoration = null;
     public Drawable mDecoraClick = null;
     private Context context;
+    private Calendar planStart;
+    private Calendar planEnd;
 	public interface OnCellTouchListener {
     	public void onTouch(Cell cell);
     }
@@ -118,6 +127,7 @@ public class CalendarView extends ImageView {
     }
 	
 	private void initCells() {
+		Log.d(TAG, "initCells "+Tools.currentSystemTime());
 	    class _calendar {
 	    	public int day;
 	    	public int whichMonth;  // -1 为上月  1为下月  0为此月
@@ -173,6 +183,24 @@ public class CalendarView extends ImageView {
 					mToday = mCells[week][day];
 					mDecoration.setBounds(mToday.getBound());
 				}
+				
+				Calendar tempCalendar;
+				if(mHelper.isWithinCurrentMonth(week,day)){
+					tempCalendar=Calendar.getInstance();
+					tempCalendar.set(mHelper.getYear(), mHelper.getMonth(), mHelper.getDayAt(week, day));
+				}else if(week == 0) {
+					//上个月
+					tempCalendar=Calendar.getInstance();
+					tempCalendar.set(mHelper.getYear(), mHelper.getMonth(), mHelper.getDayAt(week, day));
+					tempCalendar.add(Calendar.MONTH, -1);
+	    		} else {
+	    			//下个月
+	    			tempCalendar=Calendar.getInstance();
+					tempCalendar.set(mHelper.getYear(), mHelper.getMonth(), mHelper.getDayAt(week, day));
+					tempCalendar.add(Calendar.MONTH, 1);
+	    		}
+				mCells[week][day].inRange=tempCalendar.after(planStart)&&tempCalendar.before(planEnd);
+				mCells[week][day].isPassed=mCells[week][day].inRange&&tempCalendar.before(today);
 			}
 			Bound.offset(0, CELL_HEIGH); // move to next row and first column
 			Bound.left = CELL_MARGIN_LEFT;
@@ -326,6 +354,36 @@ public class CalendarView extends ImageView {
 			super(dayOfMon, rect, s);
 			mPaint.setColor(0xdddd0000);
 		}			
+		
+	}
+
+	/**
+	 * 设置计划的开始时间和结束时间
+	 * @author LiChaofei
+	 * <br/>2014-3-11 下午4:49:37
+	 * @param startDate
+	 * @param endDate
+	 */
+	public void setRange(String startDate, String endDate) {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd");
+		Date start = null;
+		Date end = null;
+		try {
+			start = sdf.parse(startDate);
+			end=sdf.parse(endDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		planStart=Calendar.getInstance();
+		if(start!=null){
+			planStart.setTime(start);
+		}
+		planEnd=Calendar.getInstance();
+		if(end!=null){
+			planEnd.setTime(end);
+		}
+    	initCells();
+		this.invalidate();
 		
 	}
 

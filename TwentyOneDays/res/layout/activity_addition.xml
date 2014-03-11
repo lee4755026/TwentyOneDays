@@ -34,6 +34,8 @@
             android:gravity="bottom|left"
             android:paddingTop="5dp"
             android:paddingBottom="2dp"
+            android:textColorHint="@color/grey"
+            android:hint="开始一个好习惯吧..."
             android:text="" />
 
         <Button
@@ -55,8 +57,10 @@
         android:minLines="6"
         android:padding="10dp"
         android:singleLine="false"
-        android:text="每天晚饭后读半小时书，书箱是人类进步的阶梯。"
+        android:textColorHint="@color/grey"
+        android:hint="习惯就是习惯,谁也不能将其扔出窗外,只能一步一步地引下楼。"
         android:textColor="@color/white"
+        android:text=""
         android:textSize="20sp" />
 
     <TextView
@@ -70,7 +74,7 @@
         android:drawableLeft="@drawable/calendar"
         android:gravity="center_vertical"
         android:onClick="onViewClick"
-        android:text="1月1日--1月21日" />
+        android:text="2014/01/01--2014/01/21" />
 
     <TextView
         android:id="@+id/plan_alarm_time"

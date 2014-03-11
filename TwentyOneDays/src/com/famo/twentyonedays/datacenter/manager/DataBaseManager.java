@@ -32,6 +32,7 @@ public class DataBaseManager {
 	private void close(){
 		if(db!=null&&db.isOpen()){
 			db.close();
+			db=null;
 		}
 	}
 	/**
@@ -57,6 +58,49 @@ public class DataBaseManager {
 		return entry;
 	}
 	/**
+	 * 根据标题获取计划
+	 * @author LiChaofei
+	 * <br/>2014-3-10 下午3:04:22
+	 * @param title
+	 * @return
+	 */
+	public PlanEntry getDataByTitle(String title){
+		PlanEntry existEntry=new PlanEntry();
+		try {
+			open();
+			Cursor cursor=db.query(DataBaseHelper.TABLE_PLAN_NAME, null, DataBaseHelper.COLUMN_TITLE+"=?", new String[]{title}, null, null, null);
+			if(cursor.moveToNext()){
+				extraValues(cursor, existEntry);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			close();
+		}
+		return existEntry;
+	}
+	/**
+	 * 要据标题判断是否重复
+	 * @author LiChaofei
+	 * <br/>2014-3-10 下午3:05:27
+	 * @param title
+	 * @return
+	 */
+	public boolean isExist(String title){
+		boolean exist=false;
+		try {
+			open();
+			Cursor cursor=db.query(DataBaseHelper.TABLE_PLAN_NAME, null, DataBaseHelper.COLUMN_TITLE+"=?", new String[]{title}, null, null, null);
+			exist=cursor.getCount()>0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			close();
+		}
+		return exist;
+		
+	}
+	/**
 	 * 获取所有的记录
 	 * @author LiChaofei
 	 * <br/>2014-3-7 下午3:53:29
@@ -70,10 +114,12 @@ public class DataBaseManager {
 			while (cursor.moveToNext()) {
 				PlanEntry entry=new PlanEntry();
 				extraValues(cursor, entry);
-				
+				list.add(entry);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		}finally{
+			close();
 		}
 		return list;
 	}
@@ -156,8 +202,8 @@ public class DataBaseManager {
 		long deleteRows=0;
 		try {
 			open();
-			id=db.delete(DataBaseHelper.TABLE_PLAN_NAME, "id=?", new String[]{String.valueOf(id)});
-			if(DEBUG)Log.d(TAG, "删除记录id="+id);
+			deleteRows=db.delete(DataBaseHelper.TABLE_PLAN_NAME, "id=?", new String[]{String.valueOf(id)});
+			if(DEBUG)Log.d(TAG, "删除"+deleteRows+"条记录。");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
