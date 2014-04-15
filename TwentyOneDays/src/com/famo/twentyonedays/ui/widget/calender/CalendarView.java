@@ -330,7 +330,7 @@ public class CalendarView extends ImageView {
 		int dx = (int) paint.measureText(String.valueOf(text)) / 2;
 		int dy = (int) (-paint.ascent() + paint.descent()) / 2;
 //		Rect re = getDrawable().getBounds();
-		canvas.drawText(text, getWidth()/2-dx, 60-dy, paint);
+		canvas.drawText(text, getWidth()/2-dx, WEEK_TOP_MARGIN-dy, paint);
 	}
 	
 	private class GrayCell extends Cell {

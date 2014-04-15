@@ -3,11 +3,15 @@
     package="com.famo.twentyonedays"
     android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0"
+    android:anyDensity="true" >
+    
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="8" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -38,10 +42,20 @@
                 <data android:mimeType="vnd.android.cursor.dir/vnd.famo.android.calendar.date" />
             </intent-filter>
         </activity>
+
+        <service android:name=".services.ReminderService" />
+        <service android:name=".services.PushService" >
+        </service>
+
+        <receiver android:name=".receiver.ReminderReceiver" >
+            <intent-filter>
+                <action android:name="com.famo.action.reminder" />
+            </intent-filter>
+        </receiver>
         <!-- 测试 -->
         <uses-library android:name="android.test.runner" />
     </application>
-     <!-- 测试 -->
+    <!-- 测试 -->
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:targetPackage="com.famo.twentyonedays" >

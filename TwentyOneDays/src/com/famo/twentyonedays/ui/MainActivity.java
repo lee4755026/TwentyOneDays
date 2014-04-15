@@ -16,6 +16,7 @@ import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.adapter.PlansAdapter;
 import com.famo.twentyonedays.datacenter.manager.DataBaseManager;
 import com.famo.twentyonedays.model.PlanEntry;
+import com.famo.twentyonedays.services.ReminderService;
 import com.famo.twentyonedays.ui.widget.ListViewCustom;
 import com.famo.twentyonedays.utils.Tools;
 
@@ -23,6 +24,7 @@ public class MainActivity extends Activity {
 	protected static final String TAG = "MainActivity";
 	public static final String PLAN_ID = "planId";
 	public static final String PLAN_TITLE = "planTitle";
+	public static final String PLAN_CONTENT="planContent";
 	private View progress;
 	private View empty;
 	private ListViewCustom listView;
@@ -39,6 +41,8 @@ public class MainActivity extends Activity {
 		bindEvents();
 		
 		manager=new DataBaseManager(MainActivity.this);
+		
+		startService(new Intent(this,ReminderService.class));
 	}
 	private void findViews() {
 		progress=findViewById(android.R.id.progress);
@@ -99,6 +103,15 @@ public class MainActivity extends Activity {
 		super.onResume();
 		new LoadPlanData().execute();
 	}
+	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		stopService(new Intent(this, ReminderService.class));
+	}
+
+
 
 
 	private class LoadPlanData extends AsyncTask<Void, Void,Boolean>{

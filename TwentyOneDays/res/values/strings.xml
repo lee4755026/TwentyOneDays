@@ -10,5 +10,8 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="load_error">加载出错</string>
+    <string name="remove">删除</string>
+    <string name="hint_title">开始一个好习惯吧&#8230;</string>
+    <string name="hint_content">习惯就是习惯,谁也不能将其扔出窗外,只能一步一步地引下楼。</string>
 
 </resources>

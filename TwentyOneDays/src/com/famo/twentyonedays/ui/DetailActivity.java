@@ -19,7 +19,9 @@ public class DetailActivity extends Activity {
 	private static final String TAG = "DetailActivity";
 	private TextView title;
 	private TextView content;
+	private TextView alarmTime;
 	private CalendarView calendarView;
+	
 	private PlanEntry entry;
 	private int planId;
 	private String planName;
@@ -40,6 +42,7 @@ public class DetailActivity extends Activity {
 	private void findViews() {
 		title = (TextView) findViewById(android.R.id.title);
 		content = (TextView) findViewById(R.id.content);
+		alarmTime=(TextView) findViewById(R.id.plan_alarm_time);
 		calendarView = (CalendarView) findViewById(R.id.calendar);
 	}
 
@@ -48,6 +51,7 @@ public class DetailActivity extends Activity {
 		Log.d(TAG, entry.toString());
 		title.setText(planName);
 		content.setText(entry.content);
+		alarmTime.setText(entry.reminderTime);
 		calendarView.setRange(entry.startDate,entry.endDate);
 	}
 	

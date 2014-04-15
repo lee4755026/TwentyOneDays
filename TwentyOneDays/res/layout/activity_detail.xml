@@ -35,16 +35,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/lightorange"
         android:cacheColorHint="#00000000"
         android:fadingEdge="none"
         android:paddingBottom="0dp"
-        android:background="@color/lightorange"
         android:scrollbars="none" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lightorange"
+            android:background="@color/orange"
             android:orientation="vertical"
             android:paddingBottom="5dp" >
 
@@ -61,10 +61,23 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/plan_alarm_time"
+                style="@style/list_item_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/brown"
+                android:clickable="true"
+                android:drawableLeft="@drawable/alarm"
+                android:gravity="center_vertical"
+                android:onClick="onViewClick"
+                android:text="" />
+
             <com.famo.twentyonedays.ui.widget.calender.CalendarView
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
         </LinearLayout>
     </ScrollView>
 
