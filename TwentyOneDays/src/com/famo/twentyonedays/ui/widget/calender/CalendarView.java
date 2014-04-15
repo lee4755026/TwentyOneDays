@@ -108,9 +108,12 @@ public class CalendarView extends ImageView {
 		WEEK_LEFT_MARGIN = (int) res.getDimension(R.dimen.week_left_margin);
 		
 		CELL_WIDTH = (int) res.getDimension(R.dimen.cell_width);
+		CELL_WIDTH=(context.getResources().getDisplayMetrics().widthPixels-getPaddingLeft()-getPaddingRight())/7;
 		CELL_HEIGH = (int) res.getDimension(R.dimen.cell_heigh);
+		CELL_HEIGH=(int) (CELL_WIDTH*0.75);
 		CELL_MARGIN_TOP = (int) res.getDimension(R.dimen.cell_margin_top);
 		CELL_MARGIN_LEFT = (int) res.getDimension(R.dimen.cell_margin_left);
+		CELL_MARGIN_LEFT=0;
 
 		CELL_TEXT_SIZE = res.getDimension(R.dimen.cell_text_size);
 		// set background
@@ -212,8 +215,8 @@ public class CalendarView extends ImageView {
 	public void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		android.util.Log.d(TAG, "left="+left);
 		Rect re = getDrawable().getBounds();
-		WEEK_LEFT_MARGIN = CELL_MARGIN_LEFT = (right-left - re.width()) / 2;
-//		WEEK_LEFT_MARGIN=(right-left-re.width())/2;
+//		WEEK_LEFT_MARGIN = CELL_MARGIN_LEFT = (right-left - re.width()) / 2;
+		
 		
 		mWeekTitle.setBounds(WEEK_LEFT_MARGIN, WEEK_TOP_MARGIN, WEEK_LEFT_MARGIN+mWeekTitle.getMinimumWidth(), WEEK_TOP_MARGIN+mWeekTitle.getMinimumHeight());
 		initCells();
@@ -292,6 +295,7 @@ public class CalendarView extends ImageView {
 		drawCurrentYearMonth(canvas);
 		
 		mWeekTitle.draw(canvas);
+		drawWeekTitle(canvas);
 		
 		// draw cells
 		for(Cell[] week : mCells) {
@@ -332,6 +336,39 @@ public class CalendarView extends ImageView {
 //		Rect re = getDrawable().getBounds();
 		canvas.drawText(text, getWidth()/2-dx, WEEK_TOP_MARGIN-dy, paint);
 	}
+	
+	/**
+	 * 绘制星期
+	 * @param canvas
+	 * @author LEE 
+	 * </br>2014-4-15 下午9:45:24
+	 */
+	private void drawWeekTitle(Canvas canvas) {
+		String weeks[]={"SUN","MON","TUE","WED","THU","FRI","SAT"};
+		Paint paint=new Paint(Paint.SUBPIXEL_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
+		paint.setTextSize(26f);
+		paint.setColor(Color.WHITE);
+		
+		paint.setStyle(Style.STROKE);
+		String text="";
+		for(int i=0;i<weeks.length;i++){
+			text = weeks[i];
+			int dx = (int) paint.measureText(text) / 2;
+			int dy = (int) (-paint.ascent() + paint.descent()) / 2;
+			if(i>0&&i<6){
+				paint.setStyle(Style.FILL);
+				paint.setColor(Color.CYAN);
+			}else{
+				paint.setStyle(Style.FILL);
+				paint.setColor(Color.BLUE);
+			}
+			Rect background=new Rect(CELL_WIDTH*i, WEEK_TOP_MARGIN+35-2*dy-20 , CELL_WIDTH*(i+1), WEEK_TOP_MARGIN+35-dy+10);
+			canvas.drawRect(background, paint);
+			paint.setColor(Color.WHITE);
+			canvas.drawText(text, CELL_WIDTH*i+CELL_WIDTH / 2 - dx, WEEK_TOP_MARGIN+35 - dy,paint);
+		}
+	}
+
 	
 	private class GrayCell extends Cell {
 		public GrayCell(int dayOfMon, Rect rect, float s) {
