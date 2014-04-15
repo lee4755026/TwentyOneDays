@@ -2,13 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigation_bar_height"
-        android:background="?navigationBackground" >
+        android:background="?navigationBackground" 
+        android:layout_marginBottom="1px">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -28,14 +30,15 @@
                 style="?titleBarTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
                 android:gravity="center_horizontal"
                 android:text="星期一"
-                android:textSize="9sp" />
+                android:textSize="11sp" />
         </LinearLayout>
 
         <Button
             android:id="@+id/add_button"
-            android:layout_width="@dimen/navigation_bar_height"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -48,7 +51,18 @@
 
         <include layout="@layout/progress_bar" />
 
-        <include layout="@layout/common_list" />
+        <com.famo.twentyonedays.ui.widget.ListViewCustom
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background"
+            android:cacheColorHint="#00000000"
+            android:divider="#dddbdb"
+            android:dividerHeight="1.0px"
+            android:drawSelectorOnTop="false"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none" >
+        </com.famo.twentyonedays.ui.widget.ListViewCustom>
 
         <include layout="@layout/list_empty" />
     </FrameLayout>

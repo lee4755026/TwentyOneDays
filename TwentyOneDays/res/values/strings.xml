@@ -4,5 +4,14 @@
     <string name="app_name">21天效应</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="hint">Hit: touch the first or last day of month to move to previous or next month.</string>
+    <string name="save_success">保存成功</string>
+    <string name="tip">提示</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="load_error">加载出错</string>
+    <string name="remove">删除</string>
+    <string name="hint_title">开始一个好习惯吧&#8230;</string>
+    <string name="hint_content">习惯就是习惯,谁也不能将其扔出窗外,只能一步一步地引下楼。</string>
 
 </resources>
