@@ -1,5 +1,6 @@
 package com.famo.twentyonedays.services;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -66,8 +67,17 @@ public class ReminderService extends Service {
 			calendar.add(Calendar.MILLISECOND, (int) (System.currentTimeMillis()-calendar.getTimeInMillis()+60*1000));
 		}
 		long firstTime = calendar.getTimeInMillis();
+		Log.d(TAG, "firstTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(firstTime)));
 		// Schedule the alarm !
-		am.setRepeating(AlarmManager.RTC_WAKEUP, firstTime, 15 * 1000, sender);
+//		am.setRepeating(AlarmManager.RTC_WAKEUP, firstTime, 15 * 1000, sender);
+		
+		
+		
+		firstTime = SystemClock.elapsedRealtime();
+		firstTime += 10*1000;
+		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+		 am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+		                            firstTime, 5*1000, sender);
 		
 		Log.d(TAG, "定时开始");
 	}

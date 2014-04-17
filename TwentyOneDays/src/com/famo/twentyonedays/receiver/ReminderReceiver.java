@@ -14,8 +14,7 @@ public class ReminderReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// Toast.makeText(context, "时间到了", Toast.LENGTH_SHORT).show();
-
+		Log.d(TAG, "onReceive");
 		String action = intent.getAction();
 		if (action!=null&&action.equals(ReminderService.ACTION_REMINDER)) {
 			Log.d(TAG, "时间到了");

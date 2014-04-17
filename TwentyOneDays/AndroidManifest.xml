@@ -44,8 +44,7 @@
         </activity>
 
         <service android:name=".services.ReminderService" />
-        <service android:name=".services.PushService" >
-        </service>
+        <service android:name=".services.PushService" />
 
         <receiver android:name=".receiver.ReminderReceiver" >
             <intent-filter>
