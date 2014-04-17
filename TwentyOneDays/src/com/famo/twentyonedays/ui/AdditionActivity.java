@@ -34,7 +34,7 @@ public class AdditionActivity extends Activity {
 	private TextView planDate;
 	private TextView planAlarmTime;
 	
-	SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd");
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd");  
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
