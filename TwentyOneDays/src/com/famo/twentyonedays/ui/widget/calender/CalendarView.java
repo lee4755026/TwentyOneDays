@@ -27,6 +27,7 @@ import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.utils.Tools;
 
 import android.R.integer;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -38,6 +39,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.MonthDisplayHelper;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -97,6 +99,8 @@ public class CalendarView extends ImageView {
 		this.context = context;
 		mDecoration = context.getResources().getDrawable(R.drawable.typeb_calendar_today);	 
 		mDecoraClick = context.getResources().getDrawable(R.drawable.typeb_calendar_today);
+		Display display=((Activity)context).getWindowManager().getDefaultDisplay();
+		Log.d(TAG, "display width="+display.getWidth()+",height="+display.getHeight());
 		initCalendarView();
 	}
 	
@@ -118,7 +122,7 @@ public class CalendarView extends ImageView {
 		CELL_TEXT_SIZE = res.getDimension(R.dimen.cell_text_size);
 		// set background
 		setImageResource(R.drawable.calendar_background);
-		mWeekTitle = res.getDrawable(R.drawable.calendar_week);
+//		mWeekTitle = res.getDrawable(R.drawable.calendar_week);
 		
 		mHelper = 
 				new MonthDisplayHelper(
@@ -214,11 +218,14 @@ public class CalendarView extends ImageView {
 	@Override
 	public void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		android.util.Log.d(TAG, "left="+left);
-		Rect re = getDrawable().getBounds();
+//		Rect re = getDrawable().getBounds();
 //		WEEK_LEFT_MARGIN = CELL_MARGIN_LEFT = (right-left - re.width()) / 2;
 		
 		
-		mWeekTitle.setBounds(WEEK_LEFT_MARGIN, WEEK_TOP_MARGIN, WEEK_LEFT_MARGIN+mWeekTitle.getMinimumWidth(), WEEK_TOP_MARGIN+mWeekTitle.getMinimumHeight());
+//		mWeekTitle.setBounds(WEEK_LEFT_MARGIN, WEEK_TOP_MARGIN, WEEK_LEFT_MARGIN+mWeekTitle.getMinimumWidth(), WEEK_TOP_MARGIN+mWeekTitle.getMinimumHeight());
+		Log.d(TAG, "view width="+getWidth()+",height="+getHeight());
+		CELL_WIDTH=getWidth()/7;
+		CELL_HEIGH=(int) (CELL_WIDTH*0.75);
 		initCells();
 		super.onLayout(changed, left, top, right, bottom);
 	}
@@ -294,7 +301,7 @@ public class CalendarView extends ImageView {
 		//绘制当前年-月
 		drawCurrentYearMonth(canvas);
 		
-		mWeekTitle.draw(canvas);
+//		mWeekTitle.draw(canvas);
 		drawWeekTitle(canvas);
 		
 		// draw cells
@@ -324,7 +331,7 @@ public class CalendarView extends ImageView {
 	 */
 	private void drawCurrentYearMonth(Canvas canvas) {
 		Paint paint=new Paint(Paint.SUBPIXEL_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
-		paint.setTextSize(26f);
+		paint.setTextSize(30f);
 		paint.setColor(Color.WHITE);
 		
 		paint.setStyle(Style.STROKE);
@@ -334,7 +341,7 @@ public class CalendarView extends ImageView {
 		int dx = (int) paint.measureText(String.valueOf(text)) / 2;
 		int dy = (int) (-paint.ascent() + paint.descent()) / 2;
 //		Rect re = getDrawable().getBounds();
-		canvas.drawText(text, getWidth()/2-dx, WEEK_TOP_MARGIN-dy, paint);
+		canvas.drawText(text, getWidth()/2-dx, WEEK_TOP_MARGIN-10-dy, paint);
 	}
 	
 	/**
@@ -357,10 +364,10 @@ public class CalendarView extends ImageView {
 			int dy = (int) (-paint.ascent() + paint.descent()) / 2;
 			if(i>0&&i<6){
 				paint.setStyle(Style.FILL);
-				paint.setColor(Color.CYAN);
+				paint.setColor(Color.rgb(215, 119, 40));
 			}else{
 				paint.setStyle(Style.FILL);
-				paint.setColor(Color.BLUE);
+				paint.setColor(Color.rgb(228, 128, 48));
 			}
 			Rect background=new Rect(CELL_WIDTH*i, WEEK_TOP_MARGIN+35-2*dy-20 , CELL_WIDTH*(i+1), WEEK_TOP_MARGIN+35-dy+10);
 			canvas.drawRect(background, paint);
