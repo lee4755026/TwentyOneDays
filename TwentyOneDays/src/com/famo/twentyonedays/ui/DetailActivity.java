@@ -1,5 +1,7 @@
 package com.famo.twentyonedays.ui;
 
+import java.text.Bidi;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +39,9 @@ public class DetailActivity extends Activity {
 		planName = getIntent().getStringExtra(MainActivity.PLAN_TITLE);
 		Log.d(TAG, "planId=" + planId + ",planName=" + planName);
 		new LoadPlanTask().execute();
+//		DataBaseManager manager=new DataBaseManager(DetailActivity.this);
+//		entry=manager.getDataById(planId);
+//		bindData();
 	}
 
 	private void findViews() {

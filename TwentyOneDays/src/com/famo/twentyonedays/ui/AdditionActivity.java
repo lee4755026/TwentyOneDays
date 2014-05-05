@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -96,16 +97,17 @@ public class AdditionActivity extends Activity {
 			break;
 		case R.id.plan_alarm_time:
 			Log.d(TAG, "选择提醒时间");
-			Calendar c=Calendar.getInstance();
-			new TimePickerDialog(AdditionActivity.this, new TimePickerDialog.OnTimeSetListener() {
-				
-				@Override
-				public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-					Log.d(TAG, "选择时间："+hourOfDay+":"+minute);
-					planAlarmTime.setText(String.format("%02d:%02d", hourOfDay,minute));						
-					
-				}
-			}, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
+//			Calendar c=Calendar.getInstance();
+//			new TimePickerDialog(AdditionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//				
+//				@Override
+//				public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//					Log.d(TAG, "选择时间："+hourOfDay+":"+minute);
+//					planAlarmTime.setText(String.format("%02d:%02d", hourOfDay,minute));						
+//					
+//				}
+//			}, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
+			showTimePicker();
 			break;
 		case R.id.save:
 			Log.d(TAG, "保存");
@@ -177,18 +179,16 @@ public class AdditionActivity extends Activity {
 		}
 	}
 	
-	private void showDataPicker(){
+	private void showTimePicker(){
 		View view=getLayoutInflater().inflate(R.layout.time_layout, null);
 		
 		final WheelView hours = (WheelView) view.findViewById(R.id.hour);
 		hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+		hours.setCyclic(true);
 	
 		final WheelView mins = (WheelView) view.findViewById(R.id.mins);
 		mins.setViewAdapter(new NumericWheelAdapter(this, 0, 59, "%02d"));
 		mins.setCyclic(true);
-	
-		final TimePicker picker = (TimePicker) view.findViewById(R.id.time);
-		picker.setIs24HourView(true);
 	
 		// set current time
 		Calendar c = Calendar.getInstance();
@@ -198,9 +198,6 @@ public class AdditionActivity extends Activity {
 		hours.setCurrentItem(curHours);
 		mins.setCurrentItem(curMinutes);
 	
-		picker.setCurrentHour(curHours);
-		picker.setCurrentMinute(curMinutes);
-	
 		// add listeners
 		addChangingListener(mins, "min");
 		addChangingListener(hours, "hour");
@@ -209,8 +206,8 @@ public class AdditionActivity extends Activity {
 			public void onChanged(WheelView wheel, int oldValue, int newValue) {
 				if (!timeScrolled) {
 					timeChanged = true;
-					picker.setCurrentHour(hours.getCurrentItem());
-					picker.setCurrentMinute(mins.getCurrentItem());
+//					picker.setCurrentHour(hours.getCurrentItem());
+//					picker.setCurrentMinute(mins.getCurrentItem());
 					timeChanged = false;
 				}
 			}
@@ -233,8 +230,8 @@ public class AdditionActivity extends Activity {
 			public void onScrollingFinished(WheelView wheel) {
 				timeScrolled = false;
 				timeChanged = true;
-				picker.setCurrentHour(hours.getCurrentItem());
-				picker.setCurrentMinute(mins.getCurrentItem());
+//				picker.setCurrentHour(hours.getCurrentItem());
+//				picker.setCurrentMinute(mins.getCurrentItem());
 				timeChanged = false;
 			}
 		};
@@ -242,17 +239,23 @@ public class AdditionActivity extends Activity {
 		hours.addScrollingListener(scrollListener);
 		mins.addScrollingListener(scrollListener);
 		
-		picker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-			public void onTimeChanged(TimePicker  view, int hourOfDay, int minute) {
-				if (!timeChanged) {
-					hours.setCurrentItem(hourOfDay, true);
-					mins.setCurrentItem(minute, true);
-				}
+		AlertDialog.Builder builder=new AlertDialog.Builder(AdditionActivity.this)
+		.setView(view)
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+//				Toast.makeText(AdditionActivity.this, hours.getCurrentItem()+","+mins.getCurrentItem(), Toast.LENGTH_SHORT).show();
+				planAlarmTime.setText(String.format("%02d:%02d", hours.getCurrentItem(),mins.getCurrentItem()));
+			}
+		}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
-		
-		AlertDialog.Builder builder=new AlertDialog.Builder(AdditionActivity.this)
-		.setView(view);
 		builder.create().show();
 	}
 

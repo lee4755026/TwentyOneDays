@@ -31,6 +31,7 @@ public class DataBaseManager {
 	}
 	private void close(){
 		if(db!=null&&db.isOpen()){
+			helper.close();
 			db.close();
 			db=null;
 		}
@@ -50,6 +51,7 @@ public class DataBaseManager {
 			if(cursor.moveToNext()){
 				extraValues(cursor, entry);
 			}
+			cursor.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -106,7 +108,7 @@ public class DataBaseManager {
 	 * <br/>2014-3-7 下午3:53:29
 	 * @return
 	 */
-	public List<PlanEntry> getPlanEntries(){
+	public synchronized List<PlanEntry> getPlanEntries(){
 		List<PlanEntry> list=new ArrayList<PlanEntry>();
 		try {
 			open();
@@ -116,6 +118,7 @@ public class DataBaseManager {
 				extraValues(cursor, entry);
 				list.add(entry);
 			}
+			cursor.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
