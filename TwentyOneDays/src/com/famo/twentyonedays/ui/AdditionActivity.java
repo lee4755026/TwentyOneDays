@@ -2,35 +2,31 @@ package com.famo.twentyonedays.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelClickedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
+import kankan.wheel.widget.adapters.ArrayWheelAdapter;
 import kankan.wheel.widget.adapters.NumericWheelAdapter;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.datacenter.manager.DataBaseManager;
 import com.famo.twentyonedays.model.PlanEntry;
-import com.famo.twentyonedays.utils.MyDialog;
 import com.famo.twentyonedays.utils.Tools;
 
 public class AdditionActivity extends Activity {
@@ -93,20 +89,11 @@ public class AdditionActivity extends Activity {
 			break;
 		case R.id.plan_performance_date:
 			Log.d(TAG, "选择日期");
-			startActivityForResult(new Intent(Intent.ACTION_PICK).setDataAndType(null, CalendarActivity.MIME_TYPE), 100);
+//			startActivityForResult(new Intent(Intent.ACTION_PICK).setDataAndType(null, CalendarActivity.MIME_TYPE), 100);
+			showDatePicker();
 			break;
 		case R.id.plan_alarm_time:
 			Log.d(TAG, "选择提醒时间");
-//			Calendar c=Calendar.getInstance();
-//			new TimePickerDialog(AdditionActivity.this, new TimePickerDialog.OnTimeSetListener() {
-//				
-//				@Override
-//				public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//					Log.d(TAG, "选择时间："+hourOfDay+":"+minute);
-//					planAlarmTime.setText(String.format("%02d:%02d", hourOfDay,minute));						
-//					
-//				}
-//			}, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
 			showTimePicker();
 			break;
 		case R.id.save:
@@ -178,7 +165,86 @@ public class AdditionActivity extends Activity {
 					
 		}
 	}
-	
+	private void showDatePicker(){
+		View view=getLayoutInflater().inflate(R.layout.date_layout, null);
+		 Calendar calendar = Calendar.getInstance();
+
+	        final WheelView month = (WheelView) view.findViewById(R.id.month);
+	        final WheelView year = (WheelView) view.findViewById(R.id.year);
+	        final WheelView day = (WheelView) view.findViewById(R.id.day);
+	        
+	        OnWheelChangedListener listener = new OnWheelChangedListener() {
+	            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+	                updateDays(year, month, day);
+	            }
+	        };
+
+	        // month
+	        int curMonth = calendar.get(Calendar.MONTH);
+	        String months[] = new String[] {"一月", "二月", "三月", "四月", "五月",
+	                "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
+	        month.setViewAdapter(new DateArrayAdapter(this, months, curMonth));
+	        month.setCurrentItem(curMonth);
+	        month.addChangingListener(listener);
+	        month.setCyclic(true);
+	    
+	        // year
+	        int curYear = calendar.get(Calendar.YEAR);
+	        year.setViewAdapter(new DateNumericAdapter(this, curYear, curYear + 10, 0));
+	        year.setCurrentItem(curYear);
+	        year.addChangingListener(listener);
+	        
+	        //day
+	        updateDays(year, month, day);
+	        day.setCurrentItem(calendar.get(Calendar.DAY_OF_MONTH) - 1);
+	        day.setCyclic(true);
+	        
+	        AlertDialog.Builder builder=new AlertDialog.Builder(AdditionActivity.this)
+			.setView(view)
+			.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					int yearValue = Calendar.getInstance().get(Calendar.YEAR)+year.getCurrentItem();
+					int monthValue = month.getCurrentItem();
+					int dayValue = day.getCurrentItem()+1;
+					final Calendar dat = Calendar.getInstance();
+					dat.set(Calendar.YEAR, yearValue);
+					dat.set(Calendar.MONTH, monthValue);
+					dat.set(Calendar.DAY_OF_MONTH, dayValue);
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+					String start=sdf.format(dat.getTime());
+					dat.add(Calendar.DAY_OF_MONTH, 20);
+					String end=sdf.format(dat.getTime());
+					planDate.setText(start+"--"+end);
+				}
+			}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			builder.create().show();
+	    }
+	    
+	    /**
+	     * Updates day wheel. Sets max days according to selected month and year
+	     */
+	    void updateDays(WheelView year, WheelView month, WheelView day) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + year.getCurrentItem());
+	        calendar.set(Calendar.MONTH, month.getCurrentItem());
+	        
+	        int maxDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	        day.setViewAdapter(new DateNumericAdapter(this, 1, maxDays, calendar.get(Calendar.DAY_OF_MONTH) - 1));
+	        int curDay = Math.min(maxDays, day.getCurrentItem() + 1);
+	        day.setCurrentItem(curDay - 1, true);
+	    }
+	    
+	    
 	private void showTimePicker(){
 		View view=getLayoutInflater().inflate(R.layout.time_layout, null);
 		
@@ -271,5 +337,73 @@ public class AdditionActivity extends Activity {
 			}
 		});
 	}
+	
+	/**
+     * Adapter for numeric wheels. Highlights the current value.
+     */
+    private class DateNumericAdapter extends NumericWheelAdapter {
+        // Index of current item
+        int currentItem;
+        // Index of item to be highlighted
+        int currentValue;
+        
+        /**
+         * Constructor
+         */
+        public DateNumericAdapter(Context context, int minValue, int maxValue, int current) {
+            super(context, minValue, maxValue);
+            this.currentValue = current;
+//            setTextSize(16);
+        }
+        
+        @Override
+        protected void configureTextView(TextView view) {
+            super.configureTextView(view);
+            if (currentItem == currentValue) {
+                view.setTextColor(0xFF0000F0);
+            }
+            view.setTypeface(Typeface.SANS_SERIF);
+        }
+        
+        @Override
+        public View getItem(int index, View cachedView, ViewGroup parent) {
+            currentItem = index;
+            return super.getItem(index, cachedView, parent);
+        }
+    }
+    
+    /**
+     * Adapter for string based wheel. Highlights the current value.
+     */
+    private class DateArrayAdapter extends ArrayWheelAdapter<String> {
+        // Index of current item
+        int currentItem;
+        // Index of item to be highlighted
+        int currentValue;
+        
+        /**
+         * Constructor
+         */
+        public DateArrayAdapter(Context context, String[] items, int current) {
+            super(context, items);
+            this.currentValue = current;
+//            setTextSize(16);
+        }
+        
+        @Override
+        protected void configureTextView(TextView view) {
+            super.configureTextView(view);
+            if (currentItem == currentValue) {
+                view.setTextColor(0xFF0000F0);
+            }
+            view.setTypeface(Typeface.SANS_SERIF);
+        }
+        
+        @Override
+        public View getItem(int index, View cachedView, ViewGroup parent) {
+            currentItem = index;
+            return super.getItem(index, cachedView, parent);
+        }
+    }
 
 }

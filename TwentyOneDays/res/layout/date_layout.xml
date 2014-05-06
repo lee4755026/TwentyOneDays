@@ -7,8 +7,8 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
@@ -16,14 +16,20 @@
         android:paddingTop="10dp" >
 
         <kankan.wheel.widget.WheelView
-            android:id="@+id/hour"
-            android:layout_width="fill_parent"
+            android:id="@+id/year"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <kankan.wheel.widget.WheelView
-            android:id="@+id/mins"
-            android:layout_width="fill_parent"
+            android:id="@+id/month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/day"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
