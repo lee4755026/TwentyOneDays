@@ -8,6 +8,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.utils.Tools;
 
 import android.app.ProgressDialog;
 import android.test.AndroidTestCase;
@@ -47,5 +49,10 @@ public class VolleyTest extends AndroidTestCase {
 	                });  
 	        requestQueue.add(jsonObjectRequest); 
 	        requestQueue.start();
+	}
+	
+	public void testScreenShot() {
+	    String format=getContext().getResources().getString(R.string.weibo_content_format);
+	    Log.d(TAG, String.format(format, "测试",12,(int)(12f/21f*100)));
 	}
 }
