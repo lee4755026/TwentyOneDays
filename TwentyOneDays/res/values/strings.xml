@@ -13,5 +13,6 @@
     <string name="remove">删除</string>
     <string name="hint_title">开始一个好习惯吧&#8230;</string>
     <string name="hint_content">习惯就是习惯,谁也不能将其扔出窗外,只能一步一步地引下楼。</string>
+    <string name="weibo_content_format">我的21天计划——%1$s,当前是第%2$d天,已经完成了%3$d%%,加油!</string>
 
 </resources>

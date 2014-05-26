@@ -27,17 +27,26 @@ public class PushService extends Service {
 		
 	}
 
+	
 
 
 	@Override
+    public void onStart(Intent intent, int startId) {
+	    super.onStart(intent, startId);
+	    if(intent==null){
+	        return;
+        }
+        planId=intent.getIntExtra(MainActivity.PLAN_ID, 0);
+        planTitle=intent.getStringExtra(MainActivity.PLAN_TITLE);
+        planContent=intent.getStringExtra(MainActivity.PLAN_CONTENT);
+        showNotification();
+    }
+
+
+
+
+    @Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if(intent==null){
-			return super.onStartCommand(intent, flags, startId);
-		}
-		planId=intent.getIntExtra(MainActivity.PLAN_ID, 0);
-		planTitle=intent.getStringExtra(MainActivity.PLAN_TITLE);
-		planContent=intent.getStringExtra(MainActivity.PLAN_CONTENT);
-//		showNotification();
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -51,7 +60,7 @@ public class PushService extends Service {
 		send.putExtra(MainActivity.PLAN_TITLE,planTitle);
 		send.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent contentIntent=PendingIntent.getActivity(this, 0, send, 0);
-		Notification notification=new Notification(R.string.app_name,planTitle,System.currentTimeMillis());
+		Notification notification=new Notification(R.drawable.ic_launcher,planTitle,System.currentTimeMillis());
 		notification.setLatestEventInfo(this, planTitle, planContent, contentIntent);
 		
 		nm.notify(R.string.app_name, notification);

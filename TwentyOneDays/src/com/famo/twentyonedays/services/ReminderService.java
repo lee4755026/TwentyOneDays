@@ -76,12 +76,11 @@ public class ReminderService extends Service {
 		firstTime = SystemClock.elapsedRealtime();
 		firstTime += 10*1000;
 		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-//		 am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//		                            firstTime, 5*1000, sender);
+		 am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+		                            firstTime, 5*1000, sender);
 		 
-		 am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-				 SystemClock.elapsedRealtime()+10*1000,
-			        5*1000, sender);
+//		 am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//				 SystemClock.elapsedRealtime()+10*1000,5*1000, sender);
 //		 am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 //			        SystemClock.elapsedRealtime() +
 //			        10 * 1000, sender);
