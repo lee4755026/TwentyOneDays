@@ -8,6 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,8 +26,9 @@ import com.famo.twentyonedays.services.ReminderService;
 import com.famo.twentyonedays.ui.widget.ListViewCustom;
 import com.famo.twentyonedays.utils.Tools;
 
-public class MainActivity extends Activity {
-	protected static final String TAG = "MainActivity";
+public class MainActivity extends ActionBarActivity {
+	private static final String ADD = "add";
+    protected static final String TAG = "MainActivity";
 	public static final String PLAN_ID = "planId";
 	public static final String PLAN_TITLE = "planTitle";
 	public static final String PLAN_CONTENT="planContent";
@@ -33,6 +40,7 @@ public class MainActivity extends Activity {
 	private PlansAdapter adapter;
 	private List<PlanEntry> dataList;
 	private DataBaseManager manager;
+	private ActionBar actionBar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,6 +49,8 @@ public class MainActivity extends Activity {
 		bindEvents();
 		
 		manager=new DataBaseManager(MainActivity.this);
+		actionBar=getSupportActionBar();
+		actionBar.setHomeButtonEnabled(false);
 		
 		startService(new Intent(this,ReminderService.class));
 	}
@@ -84,6 +94,8 @@ public class MainActivity extends Activity {
 		});
 	}
 	
+	
+	
 	private void bindData(){
 //		dataList = new ArrayList<PlanEntry>();
 //		dataList.add(new PlanEntry(1,"每天读书半小时"));
@@ -99,6 +111,26 @@ public class MainActivity extends Activity {
 	
 	
 	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuItemCompat.setShowAsAction( 
+          menu.add(ADD) 
+          .setIcon(R.drawable.add),
+//          .setTitle("添加"),
+          MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
+	    
+        return true;
+    }
+	
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getTitle().equals(ADD)) {
+            Intent intent=new Intent(MainActivity.this,AdditionActivity.class   );
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
 	protected void onResume() {
 		super.onResume();
 		new LoadPlanData().execute();
@@ -108,7 +140,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		stopService(new Intent(this, ReminderService.class));
+//		stopService(new Intent(this, ReminderService.class));
 	}
 
 

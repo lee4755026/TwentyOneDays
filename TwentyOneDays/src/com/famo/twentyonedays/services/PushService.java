@@ -1,19 +1,22 @@
 package com.famo.twentyonedays.services;
 
-import com.famo.twentyonedays.R;
-import com.famo.twentyonedays.ui.DetailActivity;
-import com.famo.twentyonedays.ui.MainActivity;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+
+import com.famo.twentyonedays.R;
+import com.famo.twentyonedays.ui.DetailActivity;
+import com.famo.twentyonedays.ui.MainActivity;
 
 public class PushService extends Service {
 	private int planId;
@@ -27,26 +30,14 @@ public class PushService extends Service {
 		
 	}
 
-	
-
-
-	@Override
-    public void onStart(Intent intent, int startId) {
-	    super.onStart(intent, startId);
-	    if(intent==null){
-	        return;
-        }
+    @Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent!=null){
         planId=intent.getIntExtra(MainActivity.PLAN_ID, 0);
         planTitle=intent.getStringExtra(MainActivity.PLAN_TITLE);
         planContent=intent.getStringExtra(MainActivity.PLAN_CONTENT);
         showNotification();
-    }
-
-
-
-
-    @Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+        }
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -59,14 +50,31 @@ public class PushService extends Service {
 		send.putExtra(MainActivity.PLAN_ID, planId);
 		send.putExtra(MainActivity.PLAN_TITLE,planTitle);
 		send.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		PendingIntent contentIntent=PendingIntent.getActivity(this, 0, send, 0);
-		Notification notification=new Notification(R.drawable.ic_launcher,planTitle,System.currentTimeMillis());
-		notification.setLatestEventInfo(this, planTitle, planContent, contentIntent);
+//		PendingIntent pendingIntent=PendingIntent.getActivity(this, 0, send, 0);
+//		Notification notification=new Notification(R.drawable.ic_launcher,planTitle,System.currentTimeMillis());
+//		notification.setLatestEventInfo(this, planTitle, planContent, contentIntent);
 		
-		nm.notify(R.string.app_name, notification);
+		TaskStackBuilder stackBuilder=TaskStackBuilder.create(this);
+		stackBuilder.addParentStack(DetailActivity.class);
+		stackBuilder.addNextIntent(send);
+		PendingIntent pendingIntent=stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		Notification notification=new NotificationCompat.Builder(this)
+		.setAutoCancel(true)
+//		.setContentInfo("contentinfo")
+		.setContentTitle(planTitle)
+		.setContentText(planContent)
+		.setDefaults(Notification.DEFAULT_SOUND)
+//		.setLargeIcon(((BitmapDrawable)getResources().getDrawable(R.drawable.ic_launcher)).getBitmap())
+//		.setTicker("Nomal ")
+		.setSmallIcon(R.drawable.ic_launcher)
+		.setContentIntent(pendingIntent)
+		.build();
+		
+		nm.notify(planId, notification);
 		
 		Thread th=new Thread(mTask);
-		th.start();
+//		th.start();
 	}
 	
 	

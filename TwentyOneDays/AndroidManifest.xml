@@ -19,6 +19,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:logo="@drawable/ic_com_sina_weibo_sdk_logo"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.MainActivity"
@@ -34,7 +35,8 @@
         <activity
             android:name=".ui.DetailActivity"
             android:parentActivityName=".ui.MainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -64,7 +66,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.ReminderService" />
+        <service android:name=".services.ReminderService" android:process=":remote"/>
         <service android:name=".services.PushService" />
 
         <receiver

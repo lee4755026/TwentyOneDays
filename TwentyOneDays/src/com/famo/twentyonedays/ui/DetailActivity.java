@@ -1,5 +1,6 @@
 package com.famo.twentyonedays.ui;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,8 +17,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,16 +70,17 @@ public class DetailActivity extends ActionBarActivity {
                     // 调用 StatusList#parse 解析字符串成微博列表对象
                     StatusList statuses = StatusList.parse(response);
                     if (statuses != null && statuses.total_number > 0) {
-                        Toast.makeText(DetailActivity.this, 
-                                "获取微博信息流成功, 条数: " + statuses.statusList.size(), 
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(DetailActivity.this,"获取微博信息流成功, 条数: " + statuses.statusList.size(),Toast.LENGTH_LONG).show();
                     }
                 } else if (response.startsWith("{\"created_at\"")) {
                     // 调用 Status#parse 解析字符串成微博对象
                     Status status = Status.parse(response);
-                    Toast.makeText(DetailActivity.this, 
-                            "发送一送微博成功, id = " + status.id, 
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(DetailActivity.this,"发送一送微博成功, id = " + status.id,Toast.LENGTH_LONG).show();
+                    
+                    if(!bitmap.isRecycled()) {//TODO:寻找位置 
+                        bitmap.recycle();
+                        bitmap=null;
+                    }
                 } else {
                     Toast.makeText(DetailActivity.this, response, Toast.LENGTH_LONG).show();
                 }
@@ -90,6 +94,7 @@ public class DetailActivity extends ActionBarActivity {
             Toast.makeText(DetailActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
     };
+    private Bitmap bitmap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +110,16 @@ public class DetailActivity extends ActionBarActivity {
 //		DataBaseManager manager=new DataBaseManager(DetailActivity.this);
 //		entry=manager.getDataById(planId);
 //		bindData();
+		
+		try {
+		    ViewConfiguration mconfig = ViewConfiguration.get(this);
+		           Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+		           if(menuKeyField != null) {
+		               menuKeyField.setAccessible(true);
+		               menuKeyField.setBoolean(mconfig, false);
+		           }
+		       } catch (Exception ex) {
+		       }
 
 	}
 
@@ -137,12 +152,16 @@ public class DetailActivity extends ActionBarActivity {
 	
 	  @Override
 	    public boolean onCreateOptionsMenu(Menu menu) { 
-	        MenuItemCompat.setShowAsAction( 
-	                menu 
-	                .add("No.1") 
-	                .setIcon(android.R.drawable.ic_menu_share)
-	                .setTitle("微博"),
-	                MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
+	      MenuInflater inflater=getMenuInflater();
+	      inflater.inflate(R.menu.share_menu, menu);
+	      
+	      return true;
+//	        MenuItemCompat.setShowAsAction( 
+//	                menu 
+//	                .add("No.1") 
+//	                .setIcon(android.R.drawable.ic_menu_share)
+//	                .setTitle("微博"),
+//	                MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
 //	        MenuItemCompat.setShowAsAction( 
 //	                menu 
 //	                .add("No.2") 
@@ -153,23 +172,18 @@ public class DetailActivity extends ActionBarActivity {
 //	                .add("No.3") 
 //	                .setIcon(android.R.drawable.ic_menu_more),  
 //	                MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
-	        return true; 
+//	        return true; 
 	    } 
 	     
 	    @Override
-	    public boolean onOptionsItemSelected(MenuItem menu) { 
-	        if (menu.getTitle() == "No.1"){ 
-	            Toast.makeText(getApplicationContext(), "You clicked first button.", Toast.LENGTH_SHORT).show(); 
-
+	    public boolean onOptionsItemSelected(MenuItem item) { 
+	        switch(item.getItemId()) {
+	        case R.id.menu_share:
+	            Toast.makeText(DetailActivity.this, "share content to sina", Toast.LENGTH_SHORT).show();
 	            onShareClick();
-	        } 
-	        if (menu.getTitle() == "No.2"){ 
-	            Toast.makeText(getApplicationContext(), "You clicked second button.", Toast.LENGTH_SHORT).show(); 
-	        } 
-	        if (menu.getTitle() == "No.3"){ 
-	            Toast.makeText(getApplicationContext(), "You clicked third button.", Toast.LENGTH_SHORT).show(); 
-	        } 
-	        return super.onOptionsItemSelected(menu); 
+	            break;
+	        }
+	        return super.onOptionsItemSelected(item); 
 	    } 
 	
 	private void onShareClick() {
@@ -204,14 +218,9 @@ public class DetailActivity extends ActionBarActivity {
         
         String content=String.format(getString(R.string.weibo_content_format), entry.title,passed,(int)((float)passed/21f*100));
         mStatusesAPI = new StatusesAPI(mAccessToken);
-//        Drawable drawable = getResources().getDrawable(R.drawable.ic_com_sina_weibo_sdk_logo);
-//        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        Bitmap bitmap=Tools.takeScreenShot(this);
+        bitmap = Tools.takeScreenShot(this);
         mStatusesAPI.upload(content, bitmap, null, null, mListener);
-        if(!bitmap.isRecycled()) {
-            bitmap.recycle();
-            bitmap=null;
-        }
+ 
     }
 
     private void ssoAuthorize() {
@@ -268,6 +277,7 @@ public class DetailActivity extends ActionBarActivity {
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(DetailActivity.this, mAccessToken);
                 postContent();
+
             } else {
             // 当您注册的应用程序签名不正确时，就会收到 Code，请确保签名正确
                 String code = values.getString("code", "");

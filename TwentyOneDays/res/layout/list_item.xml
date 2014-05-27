@@ -4,12 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_height"
     android:layout_gravity="center_vertical"
-   
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-     >
+    android:paddingRight="10dp" >
 
     <TextView
         android:id="@android:id/text1"
@@ -17,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_item_height"
         android:gravity="center_vertical"
-        android:singleLine="true"
-        android:minWidth="100dp"
-        android:text="" />
+        android:minWidth="200dp"
+        android:singleLine="true" />
 
 </LinearLayout>

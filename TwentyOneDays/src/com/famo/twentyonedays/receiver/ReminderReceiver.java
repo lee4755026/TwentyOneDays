@@ -14,7 +14,6 @@ public class ReminderReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG, "onReceive");
 		String action = intent.getAction();
 		if (action!=null&&action.equals(ReminderService.ACTION_REMINDER)) {
 			Log.d(TAG, "时间到了");

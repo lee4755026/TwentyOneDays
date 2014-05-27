@@ -43,8 +43,17 @@ public class ReminderService extends Service {
 		}
 
 	}
+	
+	
 
-	private void startNewAlarm(PlanEntry entry) {
+	@Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+	    return START_STICKY_COMPATIBILITY;
+    }
+
+
+
+    private void startNewAlarm(PlanEntry entry) {
 		Log.d(TAG, entry.toString());
 		// Intent intent=new Intent(ReminderService.this,ReminderReceiver.class);
 		Intent intent = new Intent(ACTION_REMINDER);
@@ -64,35 +73,21 @@ public class ReminderService extends Service {
 		calendar.set(Calendar.SECOND, 0);
 		
 		if(calendar.getTimeInMillis()<System.currentTimeMillis()){
-			calendar.add(Calendar.MILLISECOND, (int) (System.currentTimeMillis()-calendar.getTimeInMillis()+60*1000));
+//			calendar.add(Calendar.DAY_OF_MONTH, 1);
+		    calendar.add(Calendar.MINUTE, 1);//暂时是加1 分钟
 		}
 		long firstTime = calendar.getTimeInMillis();
 		Log.d(TAG, "firstTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(firstTime)));
 		// Schedule the alarm !
 //		am.setRepeating(AlarmManager.RTC_WAKEUP, firstTime, 15 * 1000, sender);
 		
-		
-		
-		firstTime = SystemClock.elapsedRealtime();
-		firstTime += 10*1000;
 		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-		 am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-		                            firstTime, 5*1000, sender);
+		 am.setRepeating(AlarmManager.RTC_WAKEUP,firstTime, 10*60*1000, sender);//间隔10分钟
 		 
-//		 am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//				 SystemClock.elapsedRealtime()+10*1000,5*1000, sender);
-//		 am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//			        SystemClock.elapsedRealtime() +
-//			        10 * 1000, sender);
-		
 		Log.d(TAG, "定时开始");
 	}
 	private void stopAlarm(PlanEntry entry){
 		Intent intent = new Intent(ACTION_REMINDER);
-//		intent.putExtra(MainActivity.PLAN_ID, entry.id);
-//		intent.putExtra(MainActivity.PLAN_TITLE, entry.title);
-//		intent.putExtra(MainActivity.PLAN_CONTENT, entry.content);
-//		reminderTime = entry.reminderTime;
 		int uniqueRequestCode=entry.id;
 		PendingIntent senderToEnd = PendingIntent.getBroadcast(this, uniqueRequestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		am.cancel(senderToEnd);
@@ -109,7 +104,6 @@ public class ReminderService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

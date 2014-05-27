@@ -19,7 +19,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:background="@drawable/button_back_background"
-            android:onClick="onViewClick" />
+            android:onClick="onViewClick" 
+            android:visibility="gone"/>
 
         <EditText
             android:id="@android:id/title"
@@ -28,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/line"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/abc_textfield_search_default_holo_dark"
             android:gravity="bottom|left"
             android:paddingTop="5dp"
             android:paddingBottom="2dp"
@@ -45,7 +46,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/button_ok_background"
-            android:onClick="onViewClick" />
+            android:onClick="onViewClick" 
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <EditText

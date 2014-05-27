@@ -2,6 +2,7 @@ package com.famo.twentyonedays.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelClickedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
@@ -16,8 +17,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,9 +36,10 @@ import com.famo.twentyonedays.datacenter.manager.DataBaseManager;
 import com.famo.twentyonedays.model.PlanEntry;
 import com.famo.twentyonedays.utils.Tools;
 
-public class AdditionActivity extends Activity {
+public class AdditionActivity extends ActionBarActivity {
 
 	private static final String TAG = "AdditionActivity";
+    private static final CharSequence YES = "yes";
 	private TextView TvTitle;
 	private TextView TvContent;
 	private Button back;
@@ -98,34 +106,38 @@ public class AdditionActivity extends Activity {
 			break;
 		case R.id.save:
 			Log.d(TAG, "保存");
-			if(!validate()){
-				break;
-			}
-			PlanEntry entry = new PlanEntry();
-			entry.title = TvTitle.getText().toString();
-			entry.content = TvContent.getText().toString();
-
-			String[] strs = planDate.getText().toString().split("--");
-			entry.startDate = strs[0];
-			entry.endDate = strs[1];
-			entry.reminderTime = planAlarmTime.getText().toString();
-			entry.color = Color.RED;
-			entry.createTime=Tools.currentSystemTime();
-
-			DataBaseManager manager = new DataBaseManager(
-					AdditionActivity.this);
-			if (manager.insert(entry)) {
-				Log.d(TAG, "保存成功！");
-				Toast.makeText(AdditionActivity.this,
-						R.string.save_success,
-						Toast.LENGTH_SHORT).show();
-				finish();
-			}
+			save();
 			break;
 		default:
 			break;
 		}
 	}
+
+    private void save() {
+        if(!validate()){
+           return;
+        }
+        PlanEntry entry = new PlanEntry();
+        entry.title = TvTitle.getText().toString();
+        entry.content = TvContent.getText().toString();
+
+        String[] strs = planDate.getText().toString().split("--");
+        entry.startDate = strs[0];
+        entry.endDate = strs[1];
+        entry.reminderTime = planAlarmTime.getText().toString();
+        entry.color = Color.RED;
+        entry.createTime=Tools.currentSystemTime();
+
+        DataBaseManager manager = new DataBaseManager(
+        		AdditionActivity.this);
+        if (manager.insert(entry)) {
+        	Log.d(TAG, "保存成功！");
+        	Toast.makeText(AdditionActivity.this,
+        			R.string.save_success,
+        			Toast.LENGTH_SHORT).show();
+        	finish();
+        }
+    }
 	/**
 	 * 校验
 	 * @author LiChaofei
@@ -145,8 +157,29 @@ public class AdditionActivity extends Activity {
 		return true;
 		
 	}
+	
+	
 
 	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+       if(item.getTitle().equals(YES)) {
+           save();
+       }
+        return super.onOptionsItemSelected(item);
+    }
+
+ 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItemCompat.setShowAsAction(
+            menu.add(YES)
+            .setIcon(R.drawable.abc_ic_cab_done_holo_light)
+            , MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        return true;
+    }
+
+    @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode==RESULT_OK) {
 			int year = data.getIntExtra("year", 0);
