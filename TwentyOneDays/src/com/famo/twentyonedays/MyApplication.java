@@ -7,6 +7,8 @@ import java.util.Date;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.famo.twentyonedays.ui.CrashHandler;
+
 import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
@@ -18,9 +20,12 @@ public class MyApplication extends Application {
     private Logger logger;
     @Override
     public void onCreate() {
-        // TODO Auto-generated method stub
         super.onCreate();
         initLogger();
+        
+        CrashHandler handler=CrashHandler.getInstance();
+        handler.init(getApplicationContext());
+        
     }
     
     /**
