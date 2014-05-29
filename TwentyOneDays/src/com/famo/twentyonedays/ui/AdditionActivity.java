@@ -18,7 +18,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -36,7 +35,7 @@ import com.famo.twentyonedays.datacenter.manager.DataBaseManager;
 import com.famo.twentyonedays.model.PlanEntry;
 import com.famo.twentyonedays.utils.Tools;
 
-public class AdditionActivity extends ActionBarActivity {
+public class AdditionActivity extends BaseActivity {
 
 	private static final String TAG = "AdditionActivity";
     private static final CharSequence YES = "yes";

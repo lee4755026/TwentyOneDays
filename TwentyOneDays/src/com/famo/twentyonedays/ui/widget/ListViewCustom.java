@@ -4,12 +4,14 @@ import com.famo.twentyonedays.model.PlanEntry;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 
 public class ListViewCustom extends ListView {
-	private SlideViewWidget mFocusedItemView;
+	private static final String TAG = "ListViewCustom";
+    private SlideViewWidget mFocusedItemView;
 	private OnItemClickListener mOnItemClickListener;
 	private OnItemDeleteClickListener mOnItemDeleteClickListener;
 	public ListViewCustom(Context context) {
@@ -37,7 +39,6 @@ public class ListViewCustom extends ListView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-
 		switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			int x=(int) ev.getX();
@@ -51,7 +52,8 @@ public class ListViewCustom extends ListView {
 		default:
 			break;
 		}
-		if(mFocusedItemView!=null){
+		if(mFocusedItemView!=null&&position!=INVALID_POSITION){
+		    Log.d(TAG, "position="+position+",entry="+entry+",mFocusedItemView="+mFocusedItemView);
 			mFocusedItemView.onRequireTouchEvent(ev, position);
 		}
 		

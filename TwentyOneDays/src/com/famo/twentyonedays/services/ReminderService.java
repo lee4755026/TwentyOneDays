@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.famo.twentyonedays.datacenter.manager.DataBaseManager;
 import com.famo.twentyonedays.model.PlanEntry;
 import com.famo.twentyonedays.receiver.ReminderReceiver;
@@ -30,10 +32,13 @@ public class ReminderService extends Service {
 	private static final String TAG = "ReminderService";
 	private String reminderTime = "15:51";
 	private AlarmManager am;
+	private Logger logger;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		logger=Logger.getLogger(ReminderService.class);
 		Log.d(TAG, "服务启动了");
 
 		am = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -48,7 +53,7 @@ public class ReminderService extends Service {
 
 	@Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-	    return START_STICKY_COMPATIBILITY;
+	    return START_STICKY;
     }
 
 
@@ -74,17 +79,19 @@ public class ReminderService extends Service {
 		
 		if(calendar.getTimeInMillis()<System.currentTimeMillis()){
 //			calendar.add(Calendar.DAY_OF_MONTH, 1);
-		    calendar.add(Calendar.MINUTE, 1);//暂时是加1 分钟
+		    calendar.setTimeInMillis(System.currentTimeMillis());
+		    calendar.add(Calendar.MINUTE, 1);//1分钟后触发
 		}
 		long firstTime = calendar.getTimeInMillis();
+		firstTime=System.currentTimeMillis()+5*1000;
 		Log.d(TAG, "firstTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(firstTime)));
-		// Schedule the alarm !
-//		am.setRepeating(AlarmManager.RTC_WAKEUP, firstTime, 15 * 1000, sender);
 		
 		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-		 am.setRepeating(AlarmManager.RTC_WAKEUP,firstTime, 10*60*1000, sender);//间隔10分钟
+		 am.setRepeating(AlarmManager.RTC_WAKEUP,firstTime, 60*60*1000, sender);//间隔1小时
 		 
 		Log.d(TAG, "定时开始");
+		logger.info("定时开始");
+		
 	}
 	private void stopAlarm(PlanEntry entry){
 		Intent intent = new Intent(ACTION_REMINDER);
@@ -95,11 +102,14 @@ public class ReminderService extends Service {
 
 	@Override
 	public void onDestroy() {
+	    Log.d(TAG, "onDestroy()");
 		super.onDestroy();
 		List<PlanEntry> entries = new DataBaseManager(this).getPlanEntries();
 		for (PlanEntry entry : entries) {
 			stopAlarm(entry);
 		}
+		
+		startService(new Intent(this, ReminderService.class));
 	}
 
 	@Override

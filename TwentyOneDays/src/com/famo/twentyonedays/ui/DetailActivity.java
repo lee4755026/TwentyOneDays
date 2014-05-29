@@ -43,7 +43,7 @@ import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 import com.sina.weibo.sdk.utils.LogUtil;
 
-public class DetailActivity extends ActionBarActivity {
+public class DetailActivity extends BaseActivity {
 
 	private static final String TAG = "DetailActivity";
 	private TextView title;
@@ -191,15 +191,13 @@ public class DetailActivity extends ActionBarActivity {
 
         // 获取当前已保存过的 Token
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
-        if(mAccessToken!=null) {
+        if(mAccessToken!=null&&mAccessToken.isSessionValid()) {
         // 对statusAPI实例化
             postContent();
         }else {
 //        ssoAuthorize();
         webAuthorize();
         }
-        
-        
 	}
 
     private void postContent() {

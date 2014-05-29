@@ -14,29 +14,28 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!-- android:logo="@drawable/ic_com_sina_weibo_sdk_logo" -->
     <application
+        android:name="com.famo.twentyonedays.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:logo="@drawable/ic_com_sina_weibo_sdk_logo"
+        android:logo="@drawable/ic_launcher"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.DetailActivity"
             android:parentActivityName=".ui.MainActivity"
-            android:screenOrientation="portrait" 
-            >
+            android:screenOrientation="portrait" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -65,8 +64,29 @@
                 <data android:mimeType="vnd.android.cursor.dir/vnd.famo.android.calendar.date" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.AboutActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait" >
 
-        <service android:name=".services.ReminderService" android:process=":remote"/>
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.SplashActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".services.ReminderService"
+            android:process=":remote" />
         <service android:name=".services.PushService" />
 
         <receiver
@@ -74,6 +94,17 @@
             android:process=":remote" >
             <intent-filter>
                 <action android:name="com.famo.action.reminder" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.PersistReceiver" >
+            <intent-filter android:priority="2147483647" >
+
+                <!-- 系统启动完成后会调用 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- 解锁完成后会调用 -->
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <!-- 监听情景切换 -->
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
             </intent-filter>
         </receiver>
         <!-- 测试 -->

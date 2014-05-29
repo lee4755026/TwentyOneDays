@@ -1,6 +1,9 @@
 package com.famo.twentyonedays.ui;
 
+import java.lang.reflect.Field;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,12 +30,13 @@ import com.famo.twentyonedays.services.ReminderService;
 import com.famo.twentyonedays.ui.widget.ListViewCustom;
 import com.famo.twentyonedays.utils.Tools;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
 	private static final String ADD = "add";
     protected static final String TAG = "MainActivity";
 	public static final String PLAN_ID = "planId";
 	public static final String PLAN_TITLE = "planTitle";
 	public static final String PLAN_CONTENT="planContent";
+    private static final CharSequence ABOUT = "feedback";
 	private View progress;
 	private View empty;
 	private ListViewCustom listView;
@@ -53,6 +58,18 @@ public class MainActivity extends ActionBarActivity {
 		actionBar.setHomeButtonEnabled(false);
 		
 		startService(new Intent(this,ReminderService.class));
+		logger=Logger.getLogger(MainActivity.class);
+		logger.info("mainactivity 启动");
+		
+        try {
+            ViewConfiguration mconfig = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if (menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(mconfig, false);
+            }
+        } catch (Exception ex) {
+        }
 	}
 	private void findViews() {
 		progress=findViewById(android.R.id.progress);
@@ -97,11 +114,6 @@ public class MainActivity extends ActionBarActivity {
 	
 	
 	private void bindData(){
-//		dataList = new ArrayList<PlanEntry>();
-//		dataList.add(new PlanEntry(1,"每天读书半小时"));
-//		dataList.add(new PlanEntry(2,"每天准备七点起床"));
-//		dataList.add(new PlanEntry(3,"每天只上网三小时"));
-//		dataList.add(new PlanEntry(4,"每天少看十分钟电视"));
 		String weekDay=Tools.currentWeekDay();
 		week.setText(weekDay);
 		adapter = new PlansAdapter(this, dataList);
@@ -112,11 +124,19 @@ public class MainActivity extends ActionBarActivity {
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuItemCompat.setShowAsAction( 
-          menu.add(ADD) 
-          .setIcon(R.drawable.add),
-//          .setTitle("添加"),
-          MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
+//	    MenuItemCompat.setShowAsAction( 
+//          menu.add(ADD) 
+//          .setIcon(R.drawable.add),
+////          .setTitle("添加"),
+//          MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
+//	    MenuItemCompat.setShowAsAction( 
+//	        menu.add(ABOUT) 
+//	        .setIcon(R.drawable.abc_ic_go_search_api_holo_light)
+//          .setTitle("关于"),
+//	        MenuItemCompat.SHOW_AS_ACTION_IF_ROOM); 
+	    MenuInflater inflater=getMenuInflater();
+	    inflater.inflate(R.menu.main_menu, menu);
+	     
 	    
         return true;
     }
@@ -124,9 +144,15 @@ public class MainActivity extends ActionBarActivity {
 	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getTitle().equals(ADD)) {
-            Intent intent=new Intent(MainActivity.this,AdditionActivity.class   );
+        switch(item.getItemId()) {
+        case R.id.menu_add:
+            Intent intent=new Intent(MainActivity.this,AdditionActivity.class);
             startActivity(intent);
+            break;
+        case R.id.menu_about:
+            Intent intentAbout=new Intent(MainActivity.this,AboutActivity.class);
+            startActivity(intentAbout);
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
