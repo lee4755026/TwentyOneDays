@@ -91,7 +91,7 @@ public class SplashActivity extends Activity {
             String url=((MyApplication)getApplication()).getUpdateCheckUrl();
             String result=CustomHttpClient.get(url, null);
             if(DEBUG)Log.d(TAG, "result="+result);
-            return gson.fromJson(result, VersionEntity.class);
+            return result!=null?gson.fromJson(result, VersionEntity.class):new VersionEntity();
         }
         @Override
         protected void onPostExecute(VersionEntity result) {

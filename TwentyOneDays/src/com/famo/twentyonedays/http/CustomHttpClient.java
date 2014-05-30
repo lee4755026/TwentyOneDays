@@ -135,7 +135,8 @@ public class CustomHttpClient {
             return null;
         } catch (IOException e) {
             Log.w(TAG, e.getMessage());
-            throw new RuntimeException("连接失败");
+//            throw new RuntimeException("连接失败");
+            return null;
         }
     }
     

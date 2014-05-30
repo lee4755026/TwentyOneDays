@@ -1,7 +1,7 @@
 package com.famo.twentyonedays.model;
 
 public class VersionEntity implements Comparable<VersionEntity>{
-    public Integer versionCode;
+    public Integer versionCode=0;
     public String versionName;
     public String updateUrl;
     @Override
