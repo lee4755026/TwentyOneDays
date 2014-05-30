@@ -31,11 +31,14 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
+import com.famo.twentyonedays.BuildConfig;
+
 import android.util.Log;
 
 public class CustomHttpClient {
     private static final String CHARSET=HTTP.UTF_8;
     private static final String TAG = "CustomHttpClient";
+    private static final boolean DEBUG = BuildConfig.DEBUG;
     private static HttpClient customHttpClient;
     
     /**
@@ -113,6 +116,7 @@ public class CustomHttpClient {
             String query=URLEncodedUtils.format(stripNulls(params), CHARSET);
             HttpGet request=new HttpGet(url+"?"+query);
             
+            if(DEBUG)Log.d(TAG, request.getURI().getPath());
 //            request.addHeader( "User-Agent", clientVersion );
             // HTTP/1.1
             request.addHeader( "Cache-Control", "no-cache" );
@@ -137,6 +141,7 @@ public class CustomHttpClient {
     
     private static List<NameValuePair> stripNulls(NameValuePair... nameValuePairs) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
+        if(nameValuePairs==null) return params;
         for ( int i = 0; i < nameValuePairs.length; i++ ) {
             NameValuePair param = nameValuePairs[ i ];
             if ( param.getValue() != null ) {

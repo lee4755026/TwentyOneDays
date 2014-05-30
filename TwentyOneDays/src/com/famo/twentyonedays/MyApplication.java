@@ -16,6 +16,10 @@ import de.mindpipe.android.logging.log4j.LogConfigurator;
 
 public class MyApplication extends Application {
 
+    private static final String UPDATE_SERVER = "http://twentydays.duapp.com";
+    private static final String UPDATE_PATH_CHECK = "/checkupdate";
+    private static final String UPDATE_PATH_FILE = "/fetchapk";
+    
     private static final String APP_PACKAGE_NAME = MyApplication.class.getPackage().getName();
     private Logger logger;
     @Override
@@ -64,6 +68,13 @@ public class MyApplication extends Application {
                     + File.separator + "logs";
         else 
             return getDir( "logs", Context.MODE_PRIVATE ).getPath();
+    }
+    
+    public String getUpdateCheckUrl() {
+        return UPDATE_SERVER+UPDATE_PATH_CHECK;
+    }
+    public String getUpdateFileUrl() {
+        return UPDATE_SERVER+UPDATE_PATH_FILE;
     }
 
     

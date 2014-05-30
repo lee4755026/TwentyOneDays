@@ -3,6 +3,8 @@ package com.famo.twentyonedays.ui;
 
 import org.apache.log4j.Logger;
 
+import com.famo.twentyonedays.MyApplication;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +18,10 @@ public class BaseActivity extends ActionBarActivity {
         logger=Logger.getLogger(BaseActivity.class);
 //        ActionBar actionBar=getSupportActionBar();
 //        actionBar.setDisplayShowTitleEnabled(false);
+    }
+    
+    protected MyApplication getMyApplication() {
+        return (MyApplication) getApplication();
     }
     
 }
