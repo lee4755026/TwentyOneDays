@@ -30,7 +30,7 @@ private static final String TAG = "CustomHttpClientTest";
     public void testPost() {
         
     }
-    public void testGet() {
+    public void testGet() throws Exception {
 //        String url="http://twentydays.duapp.com/checkupdate";
         String url="http://192.168.12.19:18080/checkupdate";
         //username=test&password=hnsi

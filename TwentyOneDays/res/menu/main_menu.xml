@@ -13,5 +13,11 @@
         android:showAsAction="ifRoom|withText"
         android:title="关于">
     </item>
+    <item
+        android:id="@+id/menu_map"
+        android:icon="@android:drawable/btn_plus"
+        android:showAsAction="ifRoom|withText"
+        android:title="地图">
+    </item>
 
 </menu>

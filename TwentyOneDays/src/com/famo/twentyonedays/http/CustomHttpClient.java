@@ -33,6 +33,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.famo.twentyonedays.BuildConfig;
 
+import android.accounts.NetworkErrorException;
 import android.util.Log;
 
 public class CustomHttpClient {
@@ -110,8 +111,10 @@ public class CustomHttpClient {
      * @param url
      * @param params
      * @return
+     * @throws NetworkErrorException 
+     * @throws Exception 
      */
-    public static String get(String url,NameValuePair... params) {
+    public static String get(String url,NameValuePair... params) throws NetworkErrorException {
         try {
             String query=URLEncodedUtils.format(stripNulls(params), CHARSET);
             HttpGet request=new HttpGet(url+"?"+query);
@@ -126,7 +129,7 @@ public class CustomHttpClient {
             HttpClient client=getHttpClient();
             HttpResponse response=client.execute(request);
             if(response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK) {
-                throw new RuntimeException("请求失败");
+                throw new NetworkErrorException("请求失败");
             }
             HttpEntity resEntity=response.getEntity();
             return resEntity==null?null:EntityUtils.toString(resEntity, CHARSET);

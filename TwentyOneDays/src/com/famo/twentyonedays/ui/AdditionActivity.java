@@ -134,6 +134,7 @@ public class AdditionActivity extends BaseActivity {
         	Toast.makeText(AdditionActivity.this,
         			R.string.save_success,
         			Toast.LENGTH_SHORT).show();
+        	setResult(RESULT_OK);
         	finish();
         }
     }

@@ -3,12 +3,15 @@ package com.famo.twentyonedays;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.famo.twentyonedays.ui.CrashHandler;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
@@ -22,6 +25,7 @@ public class MyApplication extends Application {
     
     private static final String APP_PACKAGE_NAME = MyApplication.class.getPackage().getName();
     private Logger logger;
+    private List<Activity> activities;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,7 +33,7 @@ public class MyApplication extends Application {
         
         CrashHandler handler=CrashHandler.getInstance();
         handler.init(getApplicationContext());
-        
+        activities=new LinkedList<Activity>();
     }
     
     /**
@@ -75,6 +79,18 @@ public class MyApplication extends Application {
     }
     public String getUpdateFileUrl() {
         return UPDATE_SERVER+UPDATE_PATH_FILE;
+    }
+    public List<Activity> getActivities(){
+        return activities;
+    }
+    /**
+     * 程序退出
+     */
+    public void exit() {
+        if(activities==null)return;
+        for(Activity activity:activities) {
+            activity.finish();
+        }
     }
 
     

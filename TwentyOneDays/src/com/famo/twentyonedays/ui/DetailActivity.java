@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -111,15 +112,15 @@ public class DetailActivity extends BaseActivity {
 //		entry=manager.getDataById(planId);
 //		bindData();
 		
-		try {
-		    ViewConfiguration mconfig = ViewConfiguration.get(this);
-		           Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-		           if(menuKeyField != null) {
-		               menuKeyField.setAccessible(true);
-		               menuKeyField.setBoolean(mconfig, false);
-		           }
-		       } catch (Exception ex) {
-		       }
+//		try {
+//		    ViewConfiguration mconfig = ViewConfiguration.get(this);
+//		           Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+//		           if(menuKeyField != null) {
+//		               menuKeyField.setAccessible(true);
+//		               menuKeyField.setBoolean(mconfig, false);
+//		           }
+//		       } catch (Exception ex) {
+//		       }
 
 	}
 
@@ -154,7 +155,12 @@ public class DetailActivity extends BaseActivity {
 	    public boolean onCreateOptionsMenu(Menu menu) { 
 	      MenuInflater inflater=getMenuInflater();
 	      inflater.inflate(R.menu.share_menu, menu);
-	      
+	     ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.menu_share));
+	        // Initialize the share intent  
+	        Intent intent = new Intent(Intent.ACTION_SEND);  
+	        intent.setType("text/plain");  
+	        intent.putExtra(Intent.EXTRA_TEXT, "Text I want to share");  
+	        provider.setShareIntent(intent); 
 	      return true;
 //	        MenuItemCompat.setShowAsAction( 
 //	                menu 
@@ -179,6 +185,8 @@ public class DetailActivity extends BaseActivity {
 	    public boolean onOptionsItemSelected(MenuItem item) { 
 	        switch(item.getItemId()) {
 	        case R.id.menu_share:
+	            break;
+	        case R.id.menu_share_1:
 	            Toast.makeText(DetailActivity.this, "share content to sina", Toast.LENGTH_SHORT).show();
 	            onShareClick();
 	            break;

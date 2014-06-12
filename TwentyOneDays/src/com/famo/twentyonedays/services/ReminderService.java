@@ -46,9 +46,7 @@ public class ReminderService extends Service {
 		for (PlanEntry entry : entries) {
 			startNewAlarm(entry);
 		}
-
 	}
-	
 	
 
 	@Override
@@ -80,16 +78,16 @@ public class ReminderService extends Service {
 		if(calendar.getTimeInMillis()<System.currentTimeMillis()){
 //			calendar.add(Calendar.DAY_OF_MONTH, 1);
 		    calendar.setTimeInMillis(System.currentTimeMillis());
-		    calendar.add(Calendar.MINUTE, 1);//1分钟后触发
+		    calendar.add(Calendar.DAY_OF_MONTH, 1);//1天后触发
 		}
 		long firstTime = calendar.getTimeInMillis();
-		firstTime=System.currentTimeMillis()+5*1000;
-		Log.d(TAG, "firstTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(firstTime)));
+//		firstTime=System.currentTimeMillis()+5*1000;
+//		Log.d(TAG, "firstTime="+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(firstTime)));
 		
 		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-		 am.setRepeating(AlarmManager.RTC_WAKEUP,firstTime, 60*60*1000, sender);//间隔1小时
+		am.setRepeating(AlarmManager.RTC_WAKEUP,firstTime, 24*60*60*1000, sender);//间隔1天
 		 
-		Log.d(TAG, "定时开始");
+//		Log.d(TAG, "定时开始");
 		logger.info("定时开始");
 		
 	}
