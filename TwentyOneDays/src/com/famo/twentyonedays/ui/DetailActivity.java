@@ -155,12 +155,12 @@ public class DetailActivity extends BaseActivity {
 	    public boolean onCreateOptionsMenu(Menu menu) { 
 	      MenuInflater inflater=getMenuInflater();
 	      inflater.inflate(R.menu.share_menu, menu);
-	     ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.menu_share));
-	        // Initialize the share intent  
-	        Intent intent = new Intent(Intent.ACTION_SEND);  
-	        intent.setType("text/plain");  
-	        intent.putExtra(Intent.EXTRA_TEXT, "Text I want to share");  
-	        provider.setShareIntent(intent); 
+//	     ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.menu_share));
+//	        // Initialize the share intent  
+//	        Intent intent = new Intent(Intent.ACTION_SEND);  
+//	        intent.setType("text/plain");  
+//	        intent.putExtra(Intent.EXTRA_TEXT, "Text I want to share");  
+//	        provider.setShareIntent(intent); 
 	      return true;
 //	        MenuItemCompat.setShowAsAction( 
 //	                menu 
@@ -185,8 +185,6 @@ public class DetailActivity extends BaseActivity {
 	    public boolean onOptionsItemSelected(MenuItem item) { 
 	        switch(item.getItemId()) {
 	        case R.id.menu_share:
-	            break;
-	        case R.id.menu_share_1:
 	            Toast.makeText(DetailActivity.this, "share content to sina", Toast.LENGTH_SHORT).show();
 	            onShareClick();
 	            break;
