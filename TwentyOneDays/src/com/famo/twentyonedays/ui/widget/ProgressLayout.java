@@ -6,30 +6,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 显示城市名称
+ * 显示计划执行的进度情况 
  * @author LiChaofei 
  * <br/>2014-3-24 下午3:03:21
  */
-public class CitiesLayout extends ViewGroup {
-private static final String TAG="CitiesLayout";
-private static final int COLUMN_COUNT=5;
+public class ProgressLayout extends ViewGroup {
+private static final String TAG="ProgressLayout";
+private static final int COLUMN_COUNT=7;
 private static final int HORIZONTAL_SPACE=2;
-private static final int VERTICAL_SPACE=5;
+private static final int VERTICAL_SPACE=2;
 private int maxChildWidth=0;
 private int maxChildHeight=0;
 
-	public CitiesLayout(Context context) {
+	public ProgressLayout(Context context) {
 		super(context);
 	}
 	
 
-	public CitiesLayout(Context context, AttributeSet attrs, int defStyle) {
+	public ProgressLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 	}
 
 
-	public CitiesLayout(Context context, AttributeSet attrs) {
+	public ProgressLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 	}

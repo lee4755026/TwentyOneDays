@@ -1,5 +1,6 @@
 package com.famo.twentyonedays.datacenter.manager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -125,6 +126,28 @@ public class DataBaseManager {
 			close();
 		}
 		return list;
+	}
+	/**
+	 * 获取所有未结束的计划
+	 * @return
+	 */
+	public synchronized List<PlanEntry> getUnderwayPlanEntries(){
+	    List<PlanEntry> list=new ArrayList<PlanEntry>();
+	    try {
+	        open();
+	        Cursor cursor=db.query(DataBaseHelper.TABLE_PLAN_NAME, null, "enddate>=? and startdate<=?", new String[] {new SimpleDateFormat("yyyy/MM/dd").format(new Date()),new SimpleDateFormat("yyyy/MM/dd").format(new Date())}, null, null, "createtime desc");
+	        while (cursor.moveToNext()) {
+	            PlanEntry entry=new PlanEntry();
+	            extraValues(cursor, entry);
+	            list.add(entry);
+	        }
+	        cursor.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }finally{
+	        close();
+	    }
+	    return list;
 	}
 	/**
 	 * 将cursor里的值填充到entry里

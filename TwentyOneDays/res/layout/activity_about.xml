@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,8 +6,36 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@android:id/text1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="关于我们" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:text="@string/about_content" />
 
-</LinearLayout>
+    <TextView
+        android:id="@android:id/text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@android:id/text1"
+        android:clickable="true"
+        android:gravity="right|center_vertical"
+        android:onClick="onTextClick"
+        android:padding="10dp"
+        android:text="阅读全文"
+        android:textColor="@color/blue" />
+
+    <Button
+        android:id="@+id/feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_feedback_background"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="onTextClick"
+        android:padding="10dp"
+        android:text="反馈邮箱:fearlesslife@163.com"
+        android:textColor="@color/blue" />
+
+</RelativeLayout>

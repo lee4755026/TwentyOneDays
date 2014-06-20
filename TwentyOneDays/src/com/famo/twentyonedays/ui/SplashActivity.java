@@ -74,7 +74,7 @@ public class SplashActivity extends Activity {
     }
     private void showAnimation() {
         currentVersion = getCurrentVersion();
-        version.setText("verson:" + currentVersion.versionName);
+        version.setText(currentVersion.versionName);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash);
         title.startAnimation(animation);
         version.startAnimation(animation);

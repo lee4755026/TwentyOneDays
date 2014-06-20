@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onBackPressed() {
         long secondTime = System.currentTimeMillis();
-        if (secondTime - firstTime > 800) {
+        if (secondTime - firstTime > 1000) {
             Toast.makeText(this, "再按一次返回键关闭程序", Toast.LENGTH_SHORT).show();
             firstTime = System.currentTimeMillis();
 

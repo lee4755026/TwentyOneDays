@@ -1,5 +1,8 @@
 package com.famo.twentyonedays.adapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.model.PlanEntry;
 import com.famo.twentyonedays.ui.DetailActivity;
@@ -92,6 +96,16 @@ public class PlansAdapter extends BaseAdapter {
 		PlanEntry planEntry = dataList.get(position);
 		planEntry.slideView=slideView;
 		holder.text.setText(planEntry.title);
+		try {
+		  Date  date=new SimpleDateFormat("yyyy/MM/dd").parse(planEntry.endDate);
+		  if(!date.after(new Date())) {//计划结束
+		      Log.d(TAG, "计划结束");
+		      slideView.getContentView().setBackgroundResource(R.drawable.list_item_done_background);
+		  }
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 		final int index=position;
 		final SlideViewWidget tempView=slideView;
 		final ListViewCustom list=(ListViewCustom) parent;

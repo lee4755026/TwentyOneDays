@@ -248,7 +248,7 @@ public class AdditionActivity extends BaseActivity {
 					
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 					String start=sdf.format(dat.getTime());
-					dat.add(Calendar.DAY_OF_MONTH, 20);
+					dat.add(Calendar.DAY_OF_MONTH, 21);
 					String end=sdf.format(dat.getTime());
 					planDate.setText(start+"--"+end);
 				}

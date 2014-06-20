@@ -15,5 +15,7 @@
     <string name="hint_content">习惯就是习惯,谁也不能将其扔出窗外,只能一步一步地引下楼。</string>
     <string name="weibo_content_format">我的21天计划——%1$s,当前是第%2$d天,已经完成了%3$d%%,加油!</string>
     <string name="about">关于</string>
+    <string name="about_content">据我国成功学专家易发久研究，习惯的形成大致分为三个阶段：\n第一阶段：1-7天左右。此阶段表现为“刻意，不自然”，需要十分刻意地提醒自己。\n第二阶段：7-21天左右。此阶段表现为“刻意，自然”，但还需要意识控制。\n第三阶段：21-90天左右，此阶段表现为“不经意，自然”，无需意识控制。</string>
+    
 
 </resources>

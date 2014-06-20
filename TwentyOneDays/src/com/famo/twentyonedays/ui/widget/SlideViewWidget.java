@@ -7,8 +7,10 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
+
 import com.famo.twentyonedays.R;
 import com.famo.twentyonedays.model.PlanEntry;
 
@@ -72,6 +74,10 @@ public class SlideViewWidget extends LinearLayout {
 	
     public void setOnSlideListener(OnSlideListener onSlideListener) {
         mOnSlideListener = onSlideListener;
+    }
+    
+    public ViewGroup getContentView() {
+        return mViewContent;
     }
     
     /**

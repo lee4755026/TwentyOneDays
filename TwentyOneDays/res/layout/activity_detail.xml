@@ -71,11 +71,13 @@
                 android:clickable="true"
                 android:drawableLeft="@drawable/alarm"
                 android:gravity="center_vertical"
+                android:typeface="sans"
+                android:textStyle="bold"
                 android:onClick="onViewClick"
                 android:text="" />
 
-            <com.famo.twentyonedays.ui.widget.calender.CalendarView
-                android:id="@+id/calendar"
+            <com.famo.twentyonedays.ui.widget.ProgressLayout
+                android:id="@+id/progress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center" />

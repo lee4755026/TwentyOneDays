@@ -4,7 +4,7 @@
     android:anyDensity="true"
     android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="0.0.1" >
+    android:versionName="0.0.1 alpha" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -89,7 +89,8 @@
         </activity>
         <activity
             android:name=".ui.SplashActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

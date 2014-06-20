@@ -42,8 +42,9 @@ public class ReminderService extends Service {
 		Log.d(TAG, "服务启动了");
 
 		am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		List<PlanEntry> entries = new DataBaseManager(this).getPlanEntries();
+		List<PlanEntry> entries = new DataBaseManager(this).getUnderwayPlanEntries();
 		for (PlanEntry entry : entries) {
+		    Log.d(TAG, entry.title);
 			startNewAlarm(entry);
 		}
 	}
