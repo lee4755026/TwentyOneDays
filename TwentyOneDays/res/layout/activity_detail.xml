@@ -72,9 +72,8 @@
                 android:drawableLeft="@drawable/alarm"
                 android:gravity="center_vertical"
                 android:typeface="sans"
-                android:textStyle="bold"
                 android:onClick="onViewClick"
-                android:text="" />
+                android:text="11:12" />
 
             <com.famo.twentyonedays.ui.widget.ProgressLayout
                 android:id="@+id/progress"

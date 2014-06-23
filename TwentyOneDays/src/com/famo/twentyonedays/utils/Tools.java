@@ -1,8 +1,11 @@
 package com.famo.twentyonedays.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,78 +23,83 @@ import android.view.View;
 
 /**
  * 工具类
- * @author LiChaofei 
- * <br/>2014-2-28 下午4:54:11
+ * 
+ * @author LiChaofei <br/>
+ *         2014-2-28 下午4:54:11
  */
 public class Tools {
-	public static String currentSystemTime(){
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return sdf.format(new Date());
-		
-	}
+    public static String currentSystemTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
 
-	public static String currentWeekDay() {
-		String week=null;
-		Calendar c=Calendar.getInstance();
-		int day=c.get(Calendar.DAY_OF_WEEK);
-		switch (day) {
-		case Calendar.SUNDAY:
-			week="星期日";
-			break;
-		case Calendar.MONDAY:
-			week="星期一";
-			break;
-		case Calendar.TUESDAY:
-			week="星期二";
-			break;
-		case Calendar.WEDNESDAY:
-			week="星期三";
-			break;
-		case Calendar.THURSDAY:
-			week="星期四";
-			break;
-		case Calendar.FRIDAY:
-			week="星期五";
-			break;
-		case Calendar.SATURDAY:
-			week="星期六";
-			break;
+    }
 
-		default:
-			break;
-		}
-		return week;
-	}
-	
-	/**
-	 * 截图返回BitMap
-	 * @param activity
-	 * @return
-	 */
-	public static Bitmap takeScreenShot(Activity activity) {
-	    Bitmap bitmap=null;
-	    View view=activity.getWindow().getDecorView();
-	    // 设置是否可以进行绘图缓存  
-        view.setDrawingCacheEnabled(true);  
-        // 如果绘图无法缓存，强制构建绘图缓存  
-        view.buildDrawingCache();  
-	    bitmap=view.getDrawingCache();
-	 // 获取状态栏高度  
-        Rect frame=new Rect();  
+    public static String currentWeekDay() {
+        String week = null;
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK);
+        switch (day) {
+        case Calendar.SUNDAY:
+            week = "星期日";
+            break;
+        case Calendar.MONDAY:
+            week = "星期一";
+            break;
+        case Calendar.TUESDAY:
+            week = "星期二";
+            break;
+        case Calendar.WEDNESDAY:
+            week = "星期三";
+            break;
+        case Calendar.THURSDAY:
+            week = "星期四";
+            break;
+        case Calendar.FRIDAY:
+            week = "星期五";
+            break;
+        case Calendar.SATURDAY:
+            week = "星期六";
+            break;
+
+        default:
+            break;
+        }
+        return week;
+    }
+
+    /**
+     * 截图返回BitMap
+     * 
+     * @param activity
+     * @return
+     */
+    public static Bitmap takeScreenShot(Activity activity) {
+        Bitmap bitmap = null;
+        View view = activity.getWindow().getDecorView();
+        // 设置是否可以进行绘图缓存
+        view.setDrawingCacheEnabled(true);
+        // 如果绘图无法缓存，强制构建绘图缓存
+        view.buildDrawingCache();
+        bitmap = view.getDrawingCache();
+        // 获取状态栏高度
+        Rect frame = new Rect();
         view.getWindowVisibleDisplayFrame(frame);
-        int statusHeight=frame.top;
-        DisplayMetrics metrics=new DisplayMetrics();
+        int statusHeight = frame.top;
+        DisplayMetrics metrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        bitmap=Bitmap.createBitmap(bitmap, 0, statusHeight+getActionBarSize(activity), metrics.widthPixels, metrics.heightPixels-statusHeight-getActionBarSize(activity));
-        
-	    return bitmap;
-	}
-	
-	public static boolean savePic(Bitmap bitmap,String fileName) {
-	    FileOutputStream outputStream=null;
-	    try {
-            outputStream=new FileOutputStream(fileName);
-            if(outputStream!=null) {
+        bitmap =
+            Bitmap.createBitmap(bitmap, 0, statusHeight + getActionBarSize(activity),
+                metrics.widthPixels, metrics.heightPixels - statusHeight
+                    - getActionBarSize(activity));
+
+        return bitmap;
+    }
+
+    public static boolean savePic(Bitmap bitmap, String fileName) {
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(fileName);
+            if (outputStream != null) {
                 bitmap.compress(CompressFormat.JPEG, 80, outputStream);
                 outputStream.flush();
                 outputStream.close();
@@ -101,27 +109,29 @@ public class Tools {
             e.printStackTrace();
         }
         return false;
-	}
-	
-	public static String shotBitmap(Activity activity) {
-	    String fileName="sdcard/"+System.currentTimeMillis()+".jpg";
-	    if(Environment.getExternalStorageState()==Environment.MEDIA_MOUNTED) {
-	        File dir=new File(Environment.getExternalStorageDirectory()+File.separator+"21DAY");
-	        if(!dir.exists()) {
-	            if(dir.mkdir()) {
-	                File file=new File(dir, "SHOT_"+System.currentTimeMillis()+".jpg");
-	                fileName=file.getAbsolutePath();
-	            }
-	        }
-	    }
-	    
-	    if(savePic(takeScreenShot(activity), fileName)){
-	        return fileName;
-	    }
-	    return   null;
-	}
+    }
+
+    public static String shotBitmap(Activity activity) {
+        String fileName = null;
+        File dir;
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            dir = new File(Environment.getExternalStorageDirectory() + File.separator + "21DAY");
+        } else {
+            dir = activity.getDir("21DAY", Context.MODE_PRIVATE);
+        }
+        if (!dir.exists()) {
+           dir.mkdir();
+        }
+        File file = new File(dir, "SHOT_" + System.currentTimeMillis() + ".jpg");
+        fileName = file.getAbsolutePath();
+
+        if (savePic(takeScreenShot(activity), fileName)) { return fileName; }
+        return null;
+    }
+
     /**
      * 获取ActionBar的高度
+     * 
      * @param context
      * @return
      */
@@ -133,5 +143,29 @@ public class Tools {
         } finally {
             values.recycle();
         }
+    }
+
+    /**
+     * 读取图片
+     * 
+     * @param path
+     * @return
+     */
+    public static Bitmap readBitmap(String path) {
+        Bitmap bitmap = null;
+        InputStream in = null;
+        try {
+            in = new FileInputStream(path);
+            bitmap = BitmapFactory.decodeStream(in);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
     }
 }

@@ -132,6 +132,7 @@
         </receiver>
         <!-- 测试 -->
         <uses-library android:name="android.test.runner" />
+        <activity android:name=".ui.WeiBoShareActivity" android:screenOrientation="portrait"></activity>
     </application>
     <!-- 测试 -->
     <instrumentation

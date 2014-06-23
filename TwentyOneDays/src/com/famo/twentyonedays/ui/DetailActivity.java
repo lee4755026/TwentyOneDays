@@ -8,6 +8,7 @@ import java.util.Date;
 import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -45,7 +46,9 @@ import com.sina.weibo.sdk.utils.LogUtil;
 
 public class DetailActivity extends BaseActivity {
 
-	private static final String TAG = "DetailActivity";
+	public static final String CONTENT = "content";
+    public static final String FILE_PATH = "filePath";
+    private static final String TAG = "DetailActivity";
 	private TextView title;
 	private TextView content;
 	private TextView alarmTime;
@@ -55,46 +58,7 @@ public class DetailActivity extends BaseActivity {
 	private PlanEntry entry;
 	private int planId;
 	private String planName;
-    private WeiboAuth mWeiboAuth;
-    public Oauth2AccessToken mAccessToken;
-    private SsoHandler mSsoHandler;
-    private StatusesAPI mStatusesAPI;
-    /**
-     * 微博 OpenAPI 回调接口。
-     */
-    private RequestListener mListener = new RequestListener() {
-        @Override
-        public void onComplete(String response) {
-            if (!TextUtils.isEmpty(response)) {
-                LogUtil.i(TAG, response);
-                if (response.startsWith("{\"statuses\"")) {
-                    // 调用 StatusList#parse 解析字符串成微博列表对象
-                    StatusList statuses = StatusList.parse(response);
-                    if (statuses != null && statuses.total_number > 0) {
-                        Toast.makeText(DetailActivity.this,"获取微博信息流成功, 条数: " + statuses.statusList.size(),Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.startsWith("{\"created_at\"")) {
-                    // 调用 Status#parse 解析字符串成微博对象
-                    Status status = Status.parse(response);
-                    Toast.makeText(DetailActivity.this,"发送一送微博成功, id = " + status.id,Toast.LENGTH_LONG).show();
-                    
-                    if(!bitmap.isRecycled()) {//TODO:寻找位置 
-                        bitmap.recycle();
-                        bitmap=null;
-                    }
-                } else {
-                    Toast.makeText(DetailActivity.this, response, Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-
-        @Override
-        public void onWeiboException(WeiboException e) {
-            LogUtil.e(TAG, e.getMessage());
-            ErrorInfo info = ErrorInfo.parse(e.getMessage());
-            Toast.makeText(DetailActivity.this, info.toString(), Toast.LENGTH_LONG).show();
-        }
-    };
+   
     private Bitmap bitmap;
 
 	@Override
@@ -223,69 +187,39 @@ public class DetailActivity extends BaseActivity {
 	    public boolean onOptionsItemSelected(MenuItem item) { 
 	        switch(item.getItemId()) {
 	        case R.id.menu_share:
-	            Toast.makeText(DetailActivity.this, "share content to sina", Toast.LENGTH_SHORT).show();
-	            onShareClick();
+//	            Toast.makeText(DetailActivity.this, "share content to sina", Toast.LENGTH_SHORT).show();
+	            postContent();
 	            break;
 	        }
 	        return super.onOptionsItemSelected(item); 
 	    } 
 	
-	private void onShareClick() {
-        Log.d(TAG, "分享到新浪微博...");
+	    private void postContent() {
+	        int passed=0;
+	        try {
+	            Calendar calendarStart=Calendar.getInstance();
+	            Calendar calendar=Calendar.getInstance();
+	            Date dateStart=new SimpleDateFormat("yyyy/MM/dd").parse(entry.startDate);
+	            calendarStart.setTime(dateStart);
+	            long l=calendar.getTimeInMillis()-calendarStart.getTimeInMillis();
+	            passed=new Long(l/(1000*60*60*24)).intValue();
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        
+	        String content=String.format(getString(R.string.weibo_content_format), entry.title,passed,(int)((float)passed/21f*100));//进度不能大于100%
+	        if(passed>21) {
+	            content=String.format(getString(R.string.weibo_completed_content_format), entry.title);
+	        }
+	        String filePath = Tools.shotBitmap(this);
 
-        // 获取当前已保存过的 Token
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
-        if(mAccessToken!=null&&mAccessToken.isSessionValid()) {
-        // 对statusAPI实例化
-            postContent();
-        }else {
-//        ssoAuthorize();
-        webAuthorize();
-        }
-	}
-
-    private void postContent() {
-        int passed=0;
-        try {
-            Calendar calendarStart=Calendar.getInstance();
-            Calendar calendar=Calendar.getInstance();
-            Date dateStart=new SimpleDateFormat("yyyy/MM/dd").parse(entry.startDate);
-            calendarStart.setTime(dateStart);
-            long l=calendar.getTimeInMillis()-calendarStart.getTimeInMillis();
-            passed=new Long(l/(1000*60*60*24)).intValue();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        
-        
-        String content=String.format(getString(R.string.weibo_content_format), entry.title,passed,(int)((float)passed/21f*100));
-        mStatusesAPI = new StatusesAPI(mAccessToken);
-        bitmap = Tools.takeScreenShot(this);
-        mStatusesAPI.upload(content, bitmap, null, null, mListener);
- 
-    }
-
-    private void ssoAuthorize() {
-        mSsoHandler = new SsoHandler(DetailActivity.this, mWeiboAuth);
-        mSsoHandler.authorize(new AuthDialogListener());
-        
-    }
-
-    /**
-     * 授权
-     */
-    private void webAuthorize() {
-        mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
-        mWeiboAuth.anthorize(new AuthDialogListener());
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (mSsoHandler != null) {
-            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
-    }
+	        Intent intent=new Intent(this,WeiBoShareActivity.class);
+	        intent.putExtra(FILE_PATH,filePath);
+	        intent.putExtra(CONTENT, content);
+	        startActivity(intent);
+	 
+	    }
 
     private class LoadPlanTask extends AsyncTask<Void, Void, Boolean>{
 
@@ -308,33 +242,6 @@ public class DetailActivity extends BaseActivity {
 		
 	}
     
-    class AuthDialogListener implements WeiboAuthListener {
-
-        @Override
-        public void onComplete(Bundle values) {
-            // 从 Bundle 中解析 Token
-            mAccessToken = Oauth2AccessToken.parseAccessToken(values);
-            if (mAccessToken.isSessionValid()) {
-                Log.d(TAG,"mAccessToken="+ mAccessToken.toString());
-                // 保存 Token 到 SharedPreferences
-                AccessTokenKeeper.writeAccessToken(DetailActivity.this, mAccessToken);
-                postContent();
-
-            } else {
-            // 当您注册的应用程序签名不正确时，就会收到 Code，请确保签名正确
-                String code = values.getString("code", "");
-                Log.d(TAG, "code="+code);
-//                .........
-            }
-        }
-
-        @Override
-        public void onCancel() {
-        }
-
-        @Override
-        public void onWeiboException(WeiboException e) {
-        }
-    }
+   
 
 }
